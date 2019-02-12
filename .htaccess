@@ -1,0 +1,26 @@
+#Deny from all
+SetEnv CI_ENV development
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /elda
+
+#Removes access to the system folder by users.
+RewriteCond %{REQUEST_URI} ^system.*
+RewriteRule ^(.*)$ /index.php/$1 [L]
+
+#Checks to see if the user is attempting to access a valid file,
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#Enable access to the images and css folders, and the robots.txt file
+RewriteCond $1 !^(index\.php|public|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+</IfModule>
+
+php_value post_max_size 30M
+php_value upload_max_filesize 30M
+
+
+RewriteCond $1 !^(index\.php|application\/public|robots\.txt)
