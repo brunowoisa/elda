@@ -46,6 +46,7 @@ Class curso_mod extends CI_Model {
     foreach ($unidades as $key => $unidade) {
       $unidades[$key]->videos = $this->get_unidade_videos($unidade->id);
       $unidades[$key]->materiais = $this->get_unidade_materiais($unidade->id);
+      $unidades[$key]->atividades = $this->get_unidade_atividades($unidade->id);
     }
     // Fazer a busca dos conteúdos da unidade.
     return $unidades;
@@ -119,6 +120,42 @@ Class curso_mod extends CI_Model {
              ->join('usuario as ul', 'ul.id = curso_unidade_material.last_change_id_usuario')
              ->where('curso_unidade_material.id', $id_material);
     return $this->db->get()->row();
+  }
+
+  public function get_unidade_atividades($id_unidade)
+  {
+    $this->db->select('curso_unidade_atividade.*
+                      ,DATE_FORMAT(curso_unidade_atividade.cadastro, "%d/%m/%Y %H:%i:%s") as cadastro
+                      ,DATE_FORMAT(curso_unidade_atividade.last_change, "%d/%m/%Y %H:%i:%s") as last_change
+                      ,uc.apelido as cadastro_usuario
+                      ,ul.apelido as last_change_usuario')
+             ->from('curso_unidade_atividade')
+             ->join('usuario as uc', 'uc.id = curso_unidade_atividade.cadastro_id_usuario')
+             ->join('usuario as ul', 'ul.id = curso_unidade_atividade.last_change_id_usuario')
+             ->where('curso_unidade_atividade.id_curso_unidade', $id_unidade);
+    return $this->db->get()->result();
+  }
+
+  public function get_atividade($id_atividade)
+  {
+    $this->db->select('curso_unidade_atividade.*
+                      ,DATE_FORMAT(curso_unidade_atividade.cadastro, "%d/%m/%Y %H:%i:%s") as cadastro
+                      ,DATE_FORMAT(curso_unidade_atividade.last_change, "%d/%m/%Y %H:%i:%s") as last_change
+                      ,uc.apelido as cadastro_usuario
+                      ,ul.apelido as last_change_usuario')
+             ->from('curso_unidade_atividade')
+             ->join('usuario as uc', 'uc.id = curso_unidade_atividade.cadastro_id_usuario')
+             ->join('usuario as ul', 'ul.id = curso_unidade_atividade.last_change_id_usuario')
+             ->where('curso_unidade_atividade.id', $id_atividade);
+    return $this->db->get()->row();
+  }
+
+  public function get_questoes($id_atividade)
+  {
+    $this->db->select('*')
+             ->from('curso_unidade_atividade_questao')
+             ->where('id_curso_unidade_atividade', $id_atividade);
+    return $this->db->get()->result();
   }
 
   public function novo($form)
@@ -292,6 +329,65 @@ Class curso_mod extends CI_Model {
       );
       $this->db->where('id', $id_material);
       $this->db->update('curso_unidade_material', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
+  }
+
+  public function novo_atividade($id_unidade,$form,$upload)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'id_curso_unidade' => $id_unidade,
+        'titulo' => $form->titulo,
+        'obrigatoria' => $form->obrigatoria,
+        'ativo' => $form->ativo,
+        'cadastro' => date('Y-m-d H:i:s'),
+        'cadastro_id_usuario' => $this->session->userdata('usuario')->id,
+        'last_change' => date('Y-m-d H:i:s'),
+        'last_change_id_usuario' => $this->session->userdata('usuario')->id,
+      );
+      $this->db->insert('curso_unidade_atividade', $data);
+      $id_atividade = $this->db->insert_id();
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return $id_atividade;
+  }
+
+  public function editar_atividade($id_atividade,$form)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'titulo' => $form->titulo,
+        'obrigatoria' => $form->obrigatoria,
+        'ativo' => $form->ativo,
+        'last_change' => date('Y-m-d H:i:s'),
+        'last_change_id_usuario' => $this->session->userdata('usuario')->id,
+      );
+      $this->db->where('id', $id_atividade);
+      $this->db->update('curso_unidade_atividade', $data);
+
+      $this->db->where('id_curso_unidade_atividade', $id_atividade);
+      $this->db->delete('curso_unidade_atividade_questao');
+
+      if (isset($form->questao)) {
+        foreach ($form->questao as $questao) {
+          $data_questao = array(
+            'id_curso_unidade_atividade' => $id_atividade,
+            'enunciado' => $questao['enunciado'],
+            'alternativa_correta' => $questao['alternativa']['c'],
+            'alternativa_errada_1' => $questao['alternativa']['e1'],
+            'alternativa_errada_2' => $questao['alternativa']['e2'],
+            'alternativa_errada_3' => $questao['alternativa']['e3'],
+            'alternativa_errada_4' => $questao['alternativa']['e4'],
+          );
+          $this->db->insert('curso_unidade_atividade_questao', $data_questao);
+        }
+      }
     $this->db->trans_complete();
     if ($this->db->trans_status() === FALSE)
       return false;

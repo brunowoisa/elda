@@ -74,6 +74,10 @@
         display: block;
       }
 
+      .note-editing-area {
+        margin-top: 15px;
+      }
+
     </style>
 
 	  <script>

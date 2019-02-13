@@ -112,18 +112,19 @@
                     <span class="m-list-search__result-category m-list-search__result-category--first">
                       Atividades
                     </span>
-                    <a href="#" class="m-list-search__result-item">
-                      <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece"></i></span>
-                      <span class="m-list-search__result-item-text">Revisão da Unidade 1</span>
-                    </a>
-                    <a href="#" class="m-list-search__result-item">
-                      <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece m--font-danger"></i></i></span>
-                      <span class="m-list-search__result-item-text" style="text-decoration: line-through;">Revisão Geral</span>
-                    </a>
-                    <a href="#" class="m-list-search__result-item">
-                      <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece"></i></i></span>
-                      <span class="m-list-search__result-item-text">Atividade de Conclusão da Unidade 1</span>
-                    </a>
+                    <?php foreach ($unidade->atividades as $atividade): ?>
+                      <?php if ($atividade->ativo): ?>
+                        <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_atividade/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>/<?php echo $atividade->id; ?>/" class="m-list-search__result-item">
+                          <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece"></i></span>
+                          <span class="m-list-search__result-item-text"><?php echo $atividade->titulo; ?></span>
+                        </a>
+                      <?php else: ?>
+                        <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_atividade/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>/<?php echo $atividade->id; ?>/" class="m-list-search__result-item">
+                          <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece m--font-danger"></i></i></span>
+                          <span class="m-list-search__result-item-text" style="text-decoration: line-through;"><?php echo $atividade->titulo; ?></span>
+                        </a>
+                      <?php endif ?>
+                    <?php endforeach ?>
                   </div>
                 </div>
               </div>
@@ -144,7 +145,7 @@
               </div>      
             </div>
             <div class="m-portlet__head-tools">
-              <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_unidade/<?php echo $curso->id; ?>/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>" class="m-btn btn btn-outline-light"><i class="la la-edit"></i> Editar</a>
+              <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_unidade/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>" class="m-btn btn btn-outline-light"><i class="la la-edit"></i> Editar</a>
             </div>
           </div>
         </div>

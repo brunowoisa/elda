@@ -172,6 +172,7 @@ class curso extends CI_Controller {
       'curso' => $this->curso_mod->get_curso($id_curso),
       'videos' => $this->curso_mod->get_unidade_videos($id_unidade),
       'materiais' => $this->curso_mod->get_unidade_materiais($id_unidade),
+      'atividades' => $this->curso_mod->get_unidade_atividades($id_unidade),
     );
     $form = $this->input->post();
     if (!empty($form)) {
@@ -437,6 +438,91 @@ class curso extends CI_Controller {
       $mensagem = array('texto' => 'Cadastro realizado com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
     $this->load->view('mensagens',$mensagem);
     $this->load->view('elda/cadastro/curso/form-material',$data);
+  }
+
+  public function novo_atividade($id_curso,$id_unidade)
+  {
+    $mensagem = null;
+    $this->links['novo'] = '';
+    $this->links['atualizar'] = 'elda/cadastro/curso/novo_atividade/'.$id_curso.'/'.$id_unidade;
+    $this->links['voltar'] = 'elda/cadastro/curso/editar_unidade/'.$id_curso.'/'.$id_unidade;
+    $data = array(
+      'links' => $this->links,
+      'editar' => false,
+      'url_form' => 'elda/cadastro/curso/novo_atividade/'.$id_curso.'/'.$id_unidade,
+      'form' => null,
+      'curso' => $this->curso_mod->get_curso($id_curso),
+      'unidade' => $this->curso_mod->get_unidade($id_unidade),
+    );
+    $form = $this->input->post();
+    if (!empty($form)) {
+      $form = (object) $form;
+      $this->form_validation->set_rules('titulo', 'Título', 'required');
+      $this->form_validation->set_rules('obrigatoria', 'Tipo', 'required');
+      $this->form_validation->set_rules('ativo', 'Ativo', 'required');
+      if ($this->form_validation->run() == TRUE){
+        if (!$erro_upload) {
+          $res = $this->curso_mod->novo_atividade($id_unidade,$form,$upload);
+          if(!$res){
+            $mensagem = array('texto' => 'Erro ao cadastrar! Tente novamente!', 'tipo'  => 'SweetAlert', 'class' => 'error');
+          }
+          else{
+            $mensagem = array('texto' => 'Sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
+            $this->session->set_flashdata('sucesso_cadastro', true);
+            redirect(base_url().'elda/cadastro/curso/editar_atividade/'.$id_curso.'/'.$id_unidade.'/'.$res,'location');
+          }
+        }
+        else {
+          $mensagem = array('texto' => 'Houve um erro inesperado ao enviar o arquivo. Tente novamente.', 'tipo'  => 'SweetAlert', 'class' => 'error');
+          $data['form'] = $form;
+        }
+      }
+      else
+        $mensagem = array('texto' => validation_errors(), 'tipo'  => 'SweetAlert', 'class' => 'warning');
+    }
+    $this->load->view('mensagens',$mensagem);
+    $this->load->view('elda/cadastro/curso/form-atividade',$data);
+  }
+
+  public function editar_atividade($id_curso,$id_unidade,$id_atividade)
+  {
+    $mensagem = null;
+    $this->links['novo'] = '';
+    $this->links['atualizar'] = 'elda/cadastro/curso/editar_atividade/'.$id_curso.'/'.$id_unidade.'/'.$id_atividade;
+    $this->links['voltar'] = 'elda/cadastro/curso/editar_unidade/'.$id_curso.'/'.$id_unidade;
+    $data = array(
+      'links' => $this->links,
+      'editar' => true,
+      'url_form' => 'elda/cadastro/curso/editar_atividade/'.$id_curso.'/'.$id_unidade.'/'.$id_atividade,
+      'form' => null,
+      'curso' => $this->curso_mod->get_curso($id_curso),
+      'unidade' => $this->curso_mod->get_unidade($id_unidade),
+    );
+    $form = $this->input->post();
+    if (!empty($form)) {
+      $form = (object) $form;
+      $this->form_validation->set_rules('titulo', 'Título', 'required');
+      $this->form_validation->set_rules('obrigatoria', 'Tipo', 'required');
+      $this->form_validation->set_rules('ativo', 'Ativo', 'required');
+      if ($this->form_validation->run() == TRUE){
+        // epre($form);
+        $res = $this->curso_mod->editar_atividade($id_atividade,$form);
+        if(!$res){
+          $mensagem = array('texto' => 'Erro ao alterar registro! Tente novamente!', 'tipo'  => 'SweetAlert', 'class' => 'error');
+        }
+        else{
+          $mensagem = array('texto' => 'Registro alterado com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
+        }
+      }
+      else
+        $mensagem = array('texto' => validation_errors(), 'tipo'  => 'SweetAlert', 'class' => 'warning');
+    }
+    $data['form'] = $this->curso_mod->get_atividade($id_atividade);
+    $data['questoes'] = $this->curso_mod->get_questoes($id_atividade);
+    if($this->session->flashdata('sucesso_cadastro'))
+      $mensagem = array('texto' => 'Cadastro realizado com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
+    $this->load->view('mensagens',$mensagem);
+    $this->load->view('elda/cadastro/curso/form-atividade',$data);
   }
 
 }

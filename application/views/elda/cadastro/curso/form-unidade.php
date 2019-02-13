@@ -47,111 +47,115 @@
         </form>
       </div>
     </div>
-
-    <div class="row" style="margin-top: 75px;">
-      <div class="col-sm-6">
-        <h4 class="m--font-primary">Vídeos da Unidade</h4>
-      </div>
-      <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
-        <a href="<?php echo base_url(); ?>elda/cadastro/curso/novo_video/<?php echo $curso->id; ?>/<?php echo $form->id; ?>" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Vídeo</a>
-      </div>
-      <div class="col-sm-12">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Editar</th>
-              <th>Título</th>
-              <th>Status</th>
-              <th>Cadastro</th>
-              <th>Última Alteração</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($videos as $video): ?>
-              <tr>
-                <td style="text-align: center;">
-                  <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_video/<?php echo $curso->id; ?>/<?php echo $form->id; ?>/<?php echo $video->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon"><i class="fa fa-edit"></i></a>
-                </td>
-                <td><?php echo $video->titulo; ?></td>
-                <td><?php echo ($video->ativo)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle m--font-danger"></i> Inativo'; ?></td>
-                <td><?php echo $video->cadastro_usuario.' em '.$video->cadastro; ?></td>
-                <td><?php echo $video->last_change_usuario.' em '.$video->last_change; ?></td>
-              </tr>
-            <?php endforeach ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="row" style="margin-top: 75px;">
-      <div class="col-sm-6">
-        <h4 class="m--font-primary">Materiais Complementares da Unidade</h4>
-      </div>
-      <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
-        <a href="<?php echo base_url(); ?>elda/cadastro/curso/novo_material/<?php echo $curso->id; ?>/<?php echo $form->id; ?>" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Material</a>
-      </div>
-      <div class="col-sm-12">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Editar</th>
-              <th>Título</th>
-              <th>Status</th>
-              <th>Cadastro</th>
-              <th>Última Alteração</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($materiais as $material): ?>
-              <tr>
-                <td style="text-align: center;">
-                  <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_material/<?php echo $curso->id; ?>/<?php echo $form->id; ?>/<?php echo $material->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon"><i class="fa fa-edit"></i></a>
-                </td>
-                <td><?php echo $material->titulo; ?></td>
-                <td><?php echo ($material->ativo)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle m--font-danger"></i> Inativo'; ?></td>
-                <td><?php echo $material->cadastro_usuario.' em '.$material->cadastro; ?></td>
-                <td><?php echo $material->last_change_usuario.' em '.$material->last_change; ?></td>
-              </tr>
-            <?php endforeach ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="row" style="margin-top: 75px;">
-      <div class="col-sm-6">
-        <h4 class="m--font-primary">Atividades da Unidade</h4>
-      </div>
-      <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
-        <a href="#" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Atividade</a>
-      </div>
-      <div class="col-sm-12">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Título</th>
-              <th>Tipo</th>
-              <th>Status</th>
-              <th>Cadastro</th>
-              <th>Última Alteração</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
     <?php if ($editar): ?>
+      
+      <div class="row" style="margin-top: 75px;">
+        <div class="col-sm-6">
+          <h4 class="m--font-primary">Vídeos da Unidade</h4>
+        </div>
+        <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
+          <a href="<?php echo base_url(); ?>elda/cadastro/curso/novo_video/<?php echo $curso->id; ?>/<?php echo $form->id; ?>" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Vídeo</a>
+        </div>
+        <div class="col-sm-12">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Editar</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Cadastro</th>
+                <th>Última Alteração</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($videos as $video): ?>
+                <tr>
+                  <td style="text-align: center;">
+                    <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_video/<?php echo $curso->id; ?>/<?php echo $form->id; ?>/<?php echo $video->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon"><i class="fa fa-edit"></i></a>
+                  </td>
+                  <td><?php echo $video->titulo; ?></td>
+                  <td><?php echo ($video->ativo)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle m--font-danger"></i> Inativo'; ?></td>
+                  <td><?php echo $video->cadastro_usuario.' em '.$video->cadastro; ?></td>
+                  <td><?php echo $video->last_change_usuario.' em '.$video->last_change; ?></td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 75px;">
+        <div class="col-sm-6">
+          <h4 class="m--font-primary">Materiais Complementares da Unidade</h4>
+        </div>
+        <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
+          <a href="<?php echo base_url(); ?>elda/cadastro/curso/novo_material/<?php echo $curso->id; ?>/<?php echo $form->id; ?>" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Material</a>
+        </div>
+        <div class="col-sm-12">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Editar</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Cadastro</th>
+                <th>Última Alteração</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($materiais as $material): ?>
+                <tr>
+                  <td style="text-align: center;">
+                    <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_material/<?php echo $curso->id; ?>/<?php echo $form->id; ?>/<?php echo $material->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon"><i class="fa fa-edit"></i></a>
+                  </td>
+                  <td><?php echo $material->titulo; ?></td>
+                  <td><?php echo ($material->ativo)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle m--font-danger"></i> Inativo'; ?></td>
+                  <td><?php echo $material->cadastro_usuario.' em '.$material->cadastro; ?></td>
+                  <td><?php echo $material->last_change_usuario.' em '.$material->last_change; ?></td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 75px;">
+        <div class="col-sm-6">
+          <h4 class="m--font-primary">Atividades da Unidade</h4>
+        </div>
+        <div class="col-sm-6" style="text-align: right; margin-bottom: 15px;">
+          <a href="<?php echo base_url(); ?>elda/cadastro/curso/novo_atividade/<?php echo $curso->id; ?>/<?php echo $form->id; ?>" class="btn m-btn--square btn-outline-primary m-btn m-btn--custom"><i class="flaticon-add-circular-button"></i> Adicionar Atividade</a>
+        </div>
+        <div class="col-sm-12">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Cadastro</th>
+                <th>Última Alteração</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($atividades as $atividade): ?>
+                <tr>
+                  <td style="text-align: center;">
+                    <a href="<?php echo base_url(); ?>elda/cadastro/curso/editar_atividade/<?php echo $curso->id; ?>/<?php echo $form->id; ?>/<?php echo $atividade->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon"><i class="fa fa-edit"></i></a>
+                  </td>
+                  <td><?php echo $atividade->titulo; ?></td>
+                  <td><?php echo ($atividade->obrigatoria)?'Obrigatória':'Optativa'; ?></td>
+                  <td><?php echo ($atividade->ativo)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle m--font-danger"></i> Inativo'; ?></td>
+                  <td><?php echo $atividade->cadastro_usuario.' em '.$atividade->cadastro; ?></td>
+                  <td><?php echo $atividade->last_change_usuario.' em '.$atividade->last_change; ?></td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="row" style="margin-top: 0px;">
         <div class="col-sm-12">
           <div class="m-alert m-alert--icon m-alert--outline alert" role="alert">
