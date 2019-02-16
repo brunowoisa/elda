@@ -26,6 +26,16 @@ Class acesso_mod extends CI_Model {
       return true;
     }
   }
+
+  public function atualiza_sessao_usuario()
+  {
+    $this->db->select('*')
+             ->from('usuario')
+             ->where('id', $this->session->userdata('usuario')->id);
+    $usuario = $this->db->get()->row();
+    $this->session->set_userdata('usuario', $usuario);
+    return true;
+  }
   
   // /**
   //  * @param  [object()]
@@ -103,53 +113,48 @@ Class acesso_mod extends CI_Model {
     return false;
   }
 
-  // public function get_usuario_logado()
-  // {
-  //   $this->db->select('*')
-  //            ->from('usuario')
-  //            ->where('usuario.id', $this->session->userdata('usuario')->id);
-  //   return $this->db->get()->row();
-  // }
+  public function get_usuario_logado()
+  {
+    $this->db->select('*')
+             ->from('usuario')
+             ->where('usuario.id', $this->session->userdata('usuario')->id);
+    return $this->db->get()->row();
+  }
 
-  // public function editar_usuario_logado($form,$upload)
-  // {
-  //   $this->db->trans_start();
-  //     $data = array(
-  //       'telefone1' => $form->telefone1,
-  //       'telefone2' => $form->telefone2,
-  //       'email' => $form->email,
-  //     );
-  //     $this->db->where('id_usuario', $this->session->userdata('usuario')->id);
-  //     $this->db->where('id_empresa_contrato', $form->id_empresa_contrato);
-  //     $this->db->update('empresa_contrato_usuario', $data);
-  //     if($upload){
-  //       foreach ($upload as $key => $foto) {
-  //         $data_u['foto'] = $foto['file_name'];
-  //         $this->db->where('id', $this->session->userdata('usuario')->id);
-  //         $this->db->update('usuario', $data_u);
-  //       }
-  //     }
-  //   $this->db->trans_complete();
-  //   if ($this->db->trans_status() === FALSE)
-  //     return false;
-  //   else
-  //     return true;
-  // }
+  public function editar_usuario_logado($form,$upload)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'email' => $form->email,
+      );
+      if($upload){
+        foreach ($upload as $key => $foto) {
+          $data['foto'] = $foto['file_name'];
+        }
+      }
+      $this->db->where('id', $this->session->userdata('usuario')->id);
+      $this->db->update('usuario', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
+  }
 
-  // public function alterar_senha($form)
-  // {
-  //   $this->db->trans_start();
-  //     $data = array(
-  //       'senha' => $form->senha_nova_1,
-  //     );
-  //     $this->db->where('id', $this->session->userdata('usuario')->id);
-  //     $this->db->update('usuario', $data);
-  //   $this->db->trans_complete();
-  //   if ($this->db->trans_status() === FALSE)
-  //     return false;
-  //   else
-  //     return true;
-  // }
+  public function alterar_senha($form)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'senha' => $form->senha_nova_1,
+      );
+      $this->db->where('id', $this->session->userdata('usuario')->id);
+      $this->db->update('usuario', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
+  }
 
 }
   

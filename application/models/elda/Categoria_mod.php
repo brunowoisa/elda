@@ -30,6 +30,13 @@ Class categoria_mod extends CI_Model {
     return $this->db->get()->result();
   }
 
+  public function count_ativos()
+  {
+    $this->db->where('ativo', '1')
+             ->from('categoria');
+    return $this->db->count_all_results();
+  }
+
   public function get_categoria($id_categoria)
   {
     $this->db->select('categoria.*

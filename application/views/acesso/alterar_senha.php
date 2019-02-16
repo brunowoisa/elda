@@ -64,23 +64,16 @@
   $('input[data-inputmask]').inputmask();
 
   function validar_senhas() {
-    var saa = '<?php echo $this->session->userdata('usuario')->senha; ?>';
+    // var saa = '<?php echo $this->session->userdata('usuario')->senha; ?>';
     var sa = $('input[name="senha_atual"]').val();
     var s1 = $('input[name="senha_nova_1"]').val();
     var s2 = $('input[name="senha_nova_2"]').val();
-    if (sa == saa && s1 == s2 && s1.length >= 5) {
+    if (s1 == s2 && s1.length >= 5) {
       $('#form_senhas').submit();
     }
     else {
       $('input[name="senha_atual"]').val('');
-      if (sa != saa) {
-        swal(
-          'Atenção!',
-          'A senha digitada não é igual à senha atual!',
-          'warning'
-        );
-      }
-      else if (s1 != s2) {
+      if (s1 != s2) {
         swal(
           'Atenção!',
           'A nova senha não é igual à confirmação da nova senha!',

@@ -10,9 +10,9 @@ class menu extends CI_Controller {
     $this->acesso_mod->verifica_sessao();
   }
 
-	public function cadastro()
+	public function administrativo()
 	{
-		$this->load->view('elda/cadastro/menu');
+		$this->load->view('elda/administrativo/menu');
 	}
 
 }

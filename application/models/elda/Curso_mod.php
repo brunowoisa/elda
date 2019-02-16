@@ -36,6 +36,13 @@ Class curso_mod extends CI_Model {
     return $this->db->get()->row();
   }
 
+  public function count_ativos()
+  {
+    $this->db->where('ativo', '1')
+             ->from('curso');
+    return $this->db->count_all_results();
+  }
+
   public function get_unidades($id_curso)
   {
     $this->db->select('curso_unidade.*')
@@ -167,6 +174,7 @@ Class curso_mod extends CI_Model {
         'id_categoria' => $form->id_categoria,
         'ativo' => $form->ativo,
         'palavras_chave' => $form->palavras_chave,
+        'descricao' => $form->descricao,
         'cadastro' => date('Y-m-d H:i:s'),
         'cadastro_id_usuario' => $this->session->userdata('usuario')->id,
         'last_change' => date('Y-m-d H:i:s'),
@@ -190,6 +198,7 @@ Class curso_mod extends CI_Model {
         'id_categoria' => $form->id_categoria,
         'ativo' => $form->ativo,
         'palavras_chave' => $form->palavras_chave,
+        'descricao' => $form->descricao,
         'last_change' => date('Y-m-d H:i:s'),
         'last_change_id_usuario' => $this->session->userdata('usuario')->id,
       );

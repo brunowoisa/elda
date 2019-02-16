@@ -119,7 +119,7 @@
 							  <div class="m-stack m-stack--ver m-stack--general m-stack--inline">
 							    <div class="m-stack__item m-stack__item--middle m-brand__logo">
 							      <a href="index.html" class="m-brand__logo-wrapper">
-							        <img alt="<?php //echo $this->session->userdata('sistema')->nome; ?>" style="height: 50px;" src="<?php echo base_url(); ?>assets/app/media/img/logos/RisaShop.png"/>
+							        <img alt="<?php //echo $this->session->userdata('sistema')->nome; ?>" style="height: 50px;" src="<?php echo base_url(); ?>assets/app/media/img/logos/Elda.png"/>
 							      </a>  
 							    </div>
 							    <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -144,7 +144,7 @@
 							      <ul class="m-topbar__nav m-nav m-nav--inline">
 							        <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
 												  <a href="#" class="m-nav__link m-dropdown__toggle">
-												    <span class="m-topbar__username" style="color: #36606b;">
+												    <span class="m-topbar__username" style="color: #54a17c;">
 												    	<?php echo $this->session->userdata('usuario')->apelido; ?> &nbsp;&nbsp;
 												    </span>  
 												    <span class="m-topbar__userpic">
@@ -203,28 +203,6 @@
                                       </a>
                                     </li>
 												            <li class="m-nav__separator m-nav__separator--fit"></li>
-                                    <?php if ($this->session->userdata('usuario')->administrador): ?>
-                                      <li class="m-nav__item">
-                                        <a href="<?php echo base_url(); ?>acesso/configuracao_empresa/" class="m-nav__link">
-                                          <i class="m-nav__link-icon flaticon-settings"></i>
-                                          <span class="m-nav__link-text">Configurações da Empresa</span>
-                                        </a>
-                                      </li>
-                                      <li class="m-nav__separator m-nav__separator--fit"></li>
-                                    <?php endif ?>
-                                    <!-- <li class="m-nav__item">
-                                      <a href="#" class="m-nav__link">
-                                        <i class="m-nav__link-icon flaticon-chat-1"></i>
-                                        <span class="m-nav__link-text">Mensagens</span>
-                                      </a>
-                                    </li>
-												            <li class="m-nav__item">
-												              <a href="#" class="m-nav__link">
-												                <i class="m-nav__link-icon flaticon-lifebuoy"></i>
-												                <span class="m-nav__link-text">Suporte</span>
-												              </a>
-												            </li> -->
-												            <!-- <li class="m-nav__separator m-nav__separator--fit"></li> -->
 												            <li class="m-nav__item">
 												              <a href="<?php echo base_url(); ?>acesso/logoff/" target="_self" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Sair do Sistema</a>
 												            </li>
@@ -242,7 +220,7 @@
 						</div>
     			</div>
   			</div>
-  			<div class="m-header__bottom" style="background-color: #36606b;">
+  			<div class="m-header__bottom" style="background-color: #54a17c;">
 			    <div class="m-container m-container--responsive m-container--xxl m-container--full-height m-page__container">
 			      <div class="m-stack m-stack--ver m-stack--desktop">   
 			        <!-- begin::Horizontal Menu -->
@@ -254,7 +232,7 @@
 	    							<style>
                       #m_header_menu
                       {
-                        background-color: #36606b;
+                        background-color: #54a17c;
                       }
 	                    .m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-text
 	                    {
@@ -262,38 +240,41 @@
 	                    }
 	                    .m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-text:hover
 	                    {
-	                      color: #afafaf;
+	                      color: #01582e;
 	                    }
+                      .m-topbar .m-topbar__nav.m-nav > .m-nav__item.m-topbar__user-profile.m-topbar__user-profile--img.m-dropdown--arrow .m-dropdown__arrow {
+                          color: #76bd3d;
+                      }
 	                  </style>
                       <li class="m-menu__item  m-menu__item--active"  aria-haspopup="true">
                         <a  href="home" class="m-menu__link">
-                          <span class="m-menu__item-here" style="color: #36606b;"></span>
+                          <span class="m-menu__item-here" style="color: #54a17c;"></span>
                           <span class="m-menu__link-text" style="text-align: center;">
                             <i class="flaticon-home-1" style="font-size: 30px;"></i><br>Início
                           </span>
                         </a>
                       </li>
                       <li class="m-menu__item"  aria-haspopup="true">
-	                      <a  href="<?php echo base_url(); ?>elda/menu/cadastro/" class="m-menu__link">
-	                        <span class="m-menu__item-here" style="color: #36606b;"></span>
+	                      <a  href="<?php echo base_url(); ?>elda/menu/administrativo/" class="m-menu__link">
+	                        <span class="m-menu__item-here" style="color: #54a17c;"></span>
 	                        <span class="m-menu__link-text" style="text-align: center;">
-	                          <i class=" flaticon-edit" style="font-size: 30px;"></i><br>Cadastros
+	                          <i class="flaticon-globe" style="font-size: 30px;"></i><br>Administrativo
 	                        </span>
 	                      </a>
 	                    </li>
                       <li class="m-menu__item"  aria-haspopup="true">
-                        <a  href="#" class="m-menu__link">
-                          <span class="m-menu__item-here" style="color: #36606b;"></span>
+                        <a  href="<?php echo base_url(); ?>elda/cursos/catalogo/" class="m-menu__link">
+                          <span class="m-menu__item-here" style="color: #54a17c;"></span>
                           <span class="m-menu__link-text" style="text-align: center;">
-                            <i class="flaticon-presentation-1" style="font-size: 30px;"></i><br>Sala de Treinamentos
+                            <i class="flaticon-folder" style="font-size: 30px;"></i><br>Catálogo de Cursos
                           </span>
                         </a>
                       </li>
                       <li class="m-menu__item"  aria-haspopup="true">
                         <a  href="#" class="m-menu__link">
-                          <span class="m-menu__item-here" style="color: #36606b;"></span>
+                          <span class="m-menu__item-here" style="color: #54a17c;"></span>
                           <span class="m-menu__link-text" style="text-align: center;">
-                            <i class="flaticon-add" style="font-size: 30px;"></i><br>Cursos
+                            <i class="flaticon-presentation-1" style="font-size: 30px;"></i><br>Sala de Treinamentos
                           </span>
                         </a>
                       </li>
