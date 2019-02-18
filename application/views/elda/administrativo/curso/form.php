@@ -53,8 +53,8 @@
             <label for="ativo">Status</label>
             <select class="form-control m-select2 m-input--square" name="ativo">
               <option value="">-- Selecione --</option>
-              <option value="1" <?php echo set_form_select($editar,$form,'ativo', '1'); ?>>Ativo</option>
-              <option value="0" <?php echo set_form_select($editar,$form,'ativo', '0'); ?>>Inativo</option>
+              <option value="1" <?php echo set_form_select($editar,$form,'ativo', '1'); ?>>Liberado para Usuários</option>
+              <option value="0" <?php echo set_form_select($editar,$form,'ativo', '0'); ?>>Bloqueado para Usuários</option>
             </select>
           </div>
         </div>

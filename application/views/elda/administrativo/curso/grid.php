@@ -37,9 +37,9 @@
                 <td><?php echo $key->categoria; ?></td>
                 <td><?php echo $key->instrutor; ?></td>
                 <?php if ($key->ativo): ?>
-                  <td> <i class="fa fa-check-circle m--font-success"></i> Ativo</td>
+                  <td> <i class="fa fa-check-circle m--font-success"></i> Liberado para Usuários</td>
                 <?php else: ?>
-                  <td> <i class="fa fa-times-circle m--font-danger"></i> Inativo</td>
+                  <td> <i class="fa fa-times-circle m--font-danger"></i> Bloqueado para Usuários</td>
                 <?php endif ?>
               </tr>
             <?php endforeach ?>

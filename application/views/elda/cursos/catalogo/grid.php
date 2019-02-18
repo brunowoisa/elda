@@ -5,33 +5,122 @@
     { nome: "Catálogo de Cursos", href: "" },
   ];
   breadcrumbs(crumbs);
+  $(document).ready(function() {
+    $(".m-select2").select2({
+      placeholder:"-- Selecione --"
+    });
+  });
 </script>
 
-<div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
-  <div class="m-portlet__head">
-    <div class="m-portlet__head-caption">
-      <div class="m-portlet__head-title">
-        <span class="m-portlet__head-icon m--hide">
-          <i class="flaticon-statistics"></i>
-        </span>
-        <h3 class="m-portlet__head-text">
-          <b>Categoria:&nbsp;</b> PROGRAMAÇÃO PHP&nbsp;&nbsp;&nbsp;<b>Instrutor:&nbsp;</b> EspecializaTi
-        </h3>
-        <h2 class="m-portlet__head-label m-portlet__head-label--success">
-          <span>PHP 7 Básico</span>
-        </h2>
-      </div>      
+<?php if ($grid): ?>
+  <form class="m-form m-form--state" action="<?php echo base_url().$url_form; ?>" method="POST">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-10">
+            <div class="form-group">  
+              <input type="text" class="form-control m-input m-input--square form-control-sm" name="pesquisa" value="<?php echo $this->session->userdata('pesquisa_catalogo'); ?>" autocomplete="off" placeholder="Pesquisar">
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <button type="submit" id="btn_submit" class="btn m-btn--square btn-block btn-outline-info btn-sm"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3"></div>
     </div>
+    <script>
+      $('input[name="pesquisa"]').keyup(function(e) {
+        if ((e.which == 13 || e.keyCode == 13) ) { // Enter
+          $('#btn_submit').trigger('click');
+        }
+      });
+      $(document).ready(function() {
+        $('input[name="pesquisa"]').focus();
+      });
+    </script>
+  </form>
+  <?php foreach ($grid as $curso): ?>
+    <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+      <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title">
+            <span class="m-portlet__head-icon m--hide">
+              <i class="flaticon-statistics"></i>
+            </span>
+            <h3 class="m-portlet__head-text">
+              <b>Categoria:&nbsp;</b> <?php echo $curso->categoria; ?>&nbsp;&nbsp;&nbsp;<b>Instrutor:&nbsp;</b> <?php echo $curso->instrutor; ?>
+            </h3>
+            <h2 class="m-portlet__head-label m-portlet__head-label--success">
+              <span><?php echo $curso->titulo; ?></span>
+            </h2>
+          </div>      
+        </div>
+      </div>
+      <div class="m-portlet__body">
+        <p>
+          <?php echo line2br($curso->descricao); ?>
+        </p>
+        <p style="text-align: center; margin-bottom: 0; padding-bottom: 0;">
+          <button onclick="javascript:confirma_inscricao('<?php echo $curso->titulo; ?>','<?php echo $curso->id; ?>')" class="btn m-btn--square btn-outline-success m-btn m-btn--outline-2x"><i class="flaticon-edit"></i> Inscrever-me</button>
+        </p>
+      </div>
+    </div>
+  <?php endforeach ?>
+<?php else: ?>
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <div class="m-alert m-alert--icon m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+          <i class="flaticon-exclamation"></i>
+        </div>
+        <div class="m-alert__text">
+            <strong>Ops!</strong><br>Não há cursos disponíveis para inscrição no momento.
+        </div>  
+      </div>
+    </div>
+    <div class="col-sm-2"></div>
   </div>
-  <div class="m-portlet__body">
-    A Web é hoje a principal plataforma da maioria das aplicações que usamos no nosso dia a dia, desde sistemas corporativos até os diversos aplicativos utilizados por usuários comuns em tablets e smartphones. 
-    <br><br>
-    O curso de Especialização em Desenvolvimento Web Full Stack capacita desenvolvedores nas principais metodologias, linguagens e frameworks de desenvolvimento de software da atualidade, com grande profundidade e tudo a partir do início. 
-    <br><br>
-    O curso é baseado nas melhores práticas do desenvolvimento moderno de aplicações Web, apresentando as principais tecnologias de Front End, como React, Angular e Ionic, as abordagens avançadas de Single Page Applications (SPA) e Progressive Web Apps (PWA), além dos frameworks consolidados no ambiente de Back End que permitem a criação de APIs robustas baseadas em Web Services RESTful. 
-    <br><br>
-    Ainda, como diferencial, o profissional é preparado para atuar com as melhores práticas da Engenharia de Software. No curso, é praticado o método de desenvolvimento ágil alinhado à cultura DevOps de agilidade. 
-    <br><br>
-    A visão na criação de aplicações Web se completa com o emprego das estratégias de Marketing Digital, avaliadas por meio de ferramentas de Web Analytics. Durante todo o curso, os participantes têm a oportunidade de aplicar os conhecimentos no desenvolvimento de diversas aplicações reais.
-  </div>
-</div>
+<?php endif ?>
+<script>
+  function confirma_inscricao(titulo,id_curso) {
+    Swal({
+      title: titulo,
+      text: 'Deseja se increver nesse curso?',
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#f4516c',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Não, voltar.',
+      confirmButtonText: 'Sim, inscrever-me!'
+    }).then((result) => {
+      if (result.value) {
+        $.ajax({
+          url: '<?php echo base_url(); ?>elda/cursos/catalogo/ajax_incricao/',
+          type: 'POST',
+          dataType: 'json',
+          data: {id_curso: id_curso},
+        })
+        .done(function(id_inscricao) {
+          if (id_inscricao)
+            ajax_html('<?php echo base_url(); ?>elda/cursos/sala_treinamento/index/'+id_inscricao);
+          else 
+            swal(
+              'Atenção!',
+              'Houve uma falha ao realizar a inscrição. Tente novamente.',
+              'warning'
+            );
+        })
+        .fail(function() {
+          swal(
+            'Atenção!',
+            'Houve uma falha ao realizar a inscrição. Tente novamente.',
+            'warning'
+          );
+        });
+      }
+    })
+  }
+</script>

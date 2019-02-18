@@ -38,7 +38,7 @@
         <b>Palavras-Chave:</b> <?php echo $curso->palavras_chave; ?>
       </div>
       <div class="col-sm-3">
-        <b>Status: </b><?php echo ($curso->ativo == 1)?'<i class="fa fa-check-circle m--font-success"></i> Ativo':'<i class="fa fa-times-circle"></i> Inativo'; ?>
+        <b>Status: </b><?php echo ($curso->ativo == 1)?'<i class="fa fa-check-circle m--font-success"></i> Liberado para Usuários':'<i class="fa fa-times-circle m--font-danger"></i> Bloqueado para Usuários'; ?>
       </div>
     </div>
     <div class="row" style="margin-bottom: 20px;">

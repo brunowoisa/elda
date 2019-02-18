@@ -271,7 +271,7 @@
                         </a>
                       </li>
                       <li class="m-menu__item"  aria-haspopup="true">
-                        <a  href="#" class="m-menu__link">
+                        <a  href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/" class="m-menu__link">
                           <span class="m-menu__item-here" style="color: #54a17c;"></span>
                           <span class="m-menu__link-text" style="text-align: center;">
                             <i class="flaticon-presentation-1" style="font-size: 30px;"></i><br>Sala de Treinamentos

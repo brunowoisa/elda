@@ -29,10 +29,171 @@ Class curso_mod extends CI_Model {
                       ,ul.apelido as last_change_usuario
                       ')
              ->from('curso')
-             ->join('categoria', 'categoria.id = curso.id_categoria')
-             ->join('usuario as uc', 'uc.id = categoria.cadastro_id_usuario')
-             ->join('usuario as ul', 'ul.id = categoria.last_change_id_usuario')
+             ->join('categoria', 'categoria.id = curso.id_categoria','left')
+             ->join('usuario as uc', 'uc.id = categoria.cadastro_id_usuario','left')
+             ->join('usuario as ul', 'ul.id = categoria.last_change_id_usuario','left')
              ->where('curso.id', $id_curso);
+    return $this->db->get()->row();
+  }
+
+  public function get_catalogo()
+  {
+    $cursos = $this->db->select('id_curso')
+                       ->from('inscricao')
+                       ->where('id_usuario', $this->session->userdata('usuario')->id)
+                       ->get()->result();
+    $cursos_inscritos = array();
+    foreach ($cursos as $curso)
+      $cursos_inscritos[] = $curso->id_curso;
+
+    $pesquisa = $this->session->userdata('pesquisa_catalogo');
+    $this->db->select('curso.*
+                      ,categoria.nome as categoria
+                      ')
+             ->from('curso')
+             ->join('categoria', 'categoria.id = curso.id_categoria')
+             ->where('curso.ativo', '1');
+    if ($cursos_inscritos) 
+      $this->db->where_not_in('curso.id', $cursos_inscritos);
+    if ($pesquisa != '') {
+      $this->db->group_start()
+               ->like('curso.titulo', $pesquisa)
+               ->or_like('curso.instrutor', $pesquisa)
+               ->or_like('curso.palavras_chave', $pesquisa)
+               ->or_like('curso.descricao', $pesquisa)
+               ->or_like('categoria.nome', $pesquisa)
+      ->group_end();
+    }
+    return $this->db->get()->result();
+  }
+
+  public function inscrever($id_curso)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'id_usuario' => $this->session->userdata('usuario')->id,
+        'id_curso' => $id_curso,
+        'inscricao_datahora' => date('Y-m-d H:i:s'),
+      );
+      $this->db->insert('inscricao', $data);
+      $id_inscricao = $this->db->insert_id();
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return $id_inscricao;
+  }
+
+  public function marca_video_assistido($id_inscricao,$id_video)
+  {
+    $res = $this->db->from('inscricao_video_assistido')
+                    ->where('id_inscricao', $id_inscricao)
+                    ->where('id_video', $id_video)
+                    ->count_all_results();
+    if (!$res) {
+      $this->db->trans_start();
+        $data = array(
+          'id_inscricao' => $id_inscricao,
+          'id_video' => $id_video,
+          'datahora' => date('Y-m-d H:i:s'),
+        );
+        $this->db->insert('inscricao_video_assistido', $data);
+      $this->db->trans_complete();
+      if ($this->db->trans_status() === FALSE)
+        return false;
+      else
+        return true;
+    }
+    return true;
+  }
+  
+  public function marca_material_baixado($id_inscricao,$id_material)
+  {
+    $res = $this->db->from('inscricao_material_baixado')
+                    ->where('id_inscricao', $id_inscricao)
+                    ->where('id_material', $id_material)
+                    ->count_all_results();
+    if (!$res) {
+      $this->db->trans_start();
+        $data = array(
+          'id_inscricao' => $id_inscricao,
+          'id_material' => $id_material,
+          'datahora' => date('Y-m-d H:i:s'),
+        );
+        $this->db->insert('inscricao_material_baixado', $data);
+      $this->db->trans_complete();
+      if ($this->db->trans_status() === FALSE)
+        return false;
+      else
+        return true;
+    }
+    return true;
+  }
+
+  public function get_progresso_cursos($id_usuario)
+  {
+    $cursos = $this->db->select('curso.*')
+                       ->from('inscricao')
+                       ->join('curso', 'curso.id = inscricao.id_curso')
+                       ->where('inscricao.id_usuario', $id_usuario)
+                       ->get()->result();
+    $ret = array();
+    foreach ($cursos as $key => $curso) {
+      $ret[$key]['curso'] = $curso;
+      $t_a = $this->db->from('inscricao_video_assistido')
+                      ->join('inscricao', 'inscricao.id = inscricao_video_assistido.id_inscricao')
+                      ->where('inscricao.id_curso', $curso->id)
+                      ->where('inscricao.id_usuario', $id_usuario)
+                      ->count_all_results();
+      $t_c = $this->db->from('curso_unidade_video')
+                      ->join('curso_unidade', 'curso_unidade.id = curso_unidade_video.id_curso_unidade')
+                      ->where('curso_unidade.id_curso', $curso->id)
+                      ->count_all_results();
+      $ret[$key]['progresso'] = ($t_a * 100)/$t_c;
+      $ret[$key] = (object) $ret[$key];
+    }
+    return $ret;
+  }
+
+  public function get_array_videos_assistidos($id_inscricao)
+  {
+    $this->db->select('id_video')
+             ->from('inscricao_video_assistido')
+             ->where('id_inscricao', $id_inscricao);
+    $videos = $this->db->get()->result();
+    $res = array();
+    foreach ($videos as $key)
+      $res[] = $key->id_video;
+    return $res;
+  }
+
+  public function get_array_materiais_baixados($id_inscricao)
+  {
+    $this->db->select('id_material')
+             ->from('inscricao_material_baixado')
+             ->where('id_inscricao', $id_inscricao);
+    $materiais = $this->db->get()->result();
+    $res = array();
+    foreach ($materiais as $key)
+      $res[] = $key->id_material;
+    return $res;
+  }
+
+  public function get_inscricoes_usuario($id_usuario)
+  {
+    $this->db->select('inscricao.*
+                      ,curso.titulo as curso')
+             ->from('inscricao')
+             ->join('curso', 'curso.id = inscricao.id_curso')
+             ->where('inscricao.id_usuario', $id_usuario);
+    return $this->db->get()->result();
+  }
+
+  public function get_curso_incricao($id_inscricao)
+  {
+    $this->db->select('*')
+             ->from('inscricao')
+             ->where('id', $id_inscricao);
     return $this->db->get()->row();
   }
 
