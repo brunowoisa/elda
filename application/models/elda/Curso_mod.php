@@ -565,5 +565,49 @@ Class curso_mod extends CI_Model {
       return true;
   }
 
+  public function grava_nova_tentativa_atividade($data)
+  {
+    $this->db->trans_start();
+      $this->db->insert('inscricao_atividade', $data);
+      $id_inscricao_atividade = $this->db->insert_id();
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return $id_inscricao_atividade;
+  }
+
+  public function update_inscricao_atividade($id,$data)
+  {
+    $this->db->trans_start();
+      $this->db->where('id', $id);
+      $this->db->update('inscricao_atividade', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
+  }
+
+  public function get_inscricao_atividade($id)
+  {
+    $this->db->select('*')
+             ->from('inscricao_atividade')
+             ->where('id', $id);
+    return $this->db->get()->row();
+  }
+  
+  public function get_inscricao_atividades($id_inscricao,$id_atividade)
+  {
+    $this->db->select('*
+                      ,DATE_FORMAT(datahora, "%d/%m/%Y %H:%i:%s") as datahora
+                      ,DATE_FORMAT(finalizada_datahora, "%d/%m/%Y %H:%i:%s") as finalizada_datahora
+                      ')
+             ->from('inscricao_atividade')
+             ->where('id_inscricao', $id_inscricao)
+             ->where('id_atividade', $id_atividade);
+    return $this->db->get()->result();
+  }
+
 }
   

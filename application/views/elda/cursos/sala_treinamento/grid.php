@@ -233,14 +233,9 @@
                                     </span>
                                     <?php foreach ($unidade->atividades as $atividade): ?>
                                       <?php if ($atividade->ativo): ?>
-                                        <a href="<?php echo base_url(); ?>elda/administrativo/curso/editar_atividade/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>/<?php echo $atividade->id; ?>/" class="m-list-search__result-item">
+                                        <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/atividade/<?php echo $id_inscricao; ?>/<?php echo $atividade->id; ?>/" class="m-list-search__result-item">
                                           <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece"></i></span>
                                           <span class="m-list-search__result-item-text"><?php echo $atividade->titulo; ?></span>
-                                        </a>
-                                      <?php else: ?>
-                                        <a href="<?php echo base_url(); ?>elda/administrativo/curso/editar_atividade/<?php echo $curso->id; ?>/<?php echo $unidade->id; ?>/<?php echo $atividade->id; ?>/" class="m-list-search__result-item">
-                                          <span class="m-list-search__result-item-icon"><i style="font-size: 27px;" class="la la-puzzle-piece m--font-danger"></i></span>
-                                          <span class="m-list-search__result-item-text" style="text-decoration: line-through;"><?php echo $atividade->titulo; ?></span>
                                         </a>
                                       <?php endif ?>
                                     <?php endforeach ?>

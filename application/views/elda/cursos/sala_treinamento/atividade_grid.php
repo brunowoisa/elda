@@ -4,7 +4,7 @@
     { nome: "Início", href: "home/" },
     { nome: "Sala de Treinamentos", href: "elda/cursos/sala_treinamento/" },
     { nome: "<?php echo $curso->titulo; ?>", href: "elda/cursos/sala_treinamento/index/<?php echo $curso->id; ?>" },
-    { nome: "<?php echo $video->titulo; ?>", href: "" },
+    { nome: "<?php echo $atividade->titulo; ?>", href: "" },
   ];
   breadcrumbs(crumbs);
   $(document).ready(function() {
@@ -99,22 +99,83 @@
             </div>
             <div class="m-invoice__body m-invoice__body--centered">
               <?php $this->load->view('include/botoes',$links); ?>
-              <h3 style="margin-top: -10px;"><?php echo $video->titulo; ?></h3>
-              <div style="text-align: center; margin-top: 25px;">
-                <?php if ($video->tipo == 'I'): ?>
-                  <?php echo $video->video_incorporar; ?>
-                <?php else: ?>
-                  <video width="100%" controls>
-                    <?php 
-                    $link = $diretorio.$video->video;
-                    $mime = mime_content_type($link);
-                    ?>
-                    <source src="<?php echo $link; ?>" type="<?php echo $mime; ?>">
-                    Seu navegador não suporta Vídeos. Por favor atualize para a versão mais recente.
-                  </video>
-                <?php endif ?>
+              <?php //epre($atividade); ?>
+              <h3 style="margin-top: -10px;"><?php echo $atividade->titulo; ?></h3>
+              <div class="row">
+                <div class="col-sm-4">
+                  <strong>Tipo: </strong><?php echo ($atividade->obrigatoria)?'Obrigatória':'Optativa'; ?>
+                </div>
+                <div class="col-sm-4" style="text-align: center;">
+                  <?php
+                  $status = 'Não Realizada';
+                  $nota = '--';
+                  if ($tentativas){
+                    $status = ($tentativas[count($tentativas)-1]->finalizada == '1')?'Realizada':'Não Realizada';
+                    $nota = $tentativas[count($tentativas)-1]->nota;
+                  }
+                  ?>
+                  <strong>Status: </strong><?php echo $status; ?>
+                </div>
+                <div class="col-sm-4" style="text-align: right;">
+                  <strong>Nota: </strong><?php echo $nota; ?>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12" style="text-align: center; margin-top: 45px;">
+                  <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>" class="btn btn-outline-primary btn-lg m-btn m-btn--icon">
+                    <span>
+                      <i class="flaticon-list"></i>
+                      <span>Nova Tentativa</span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
+            <div class="row" style="padding:25px;">
+              <div class="col-sm-12">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Ações</th>
+                      <th>Tentativa</th>
+                      <th>Criação</th>
+                      <th>Finalizada</th>
+                      <th>Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php krsort($tentativas); ?>
+                    <?php foreach ($tentativas as $key => $tentativa): ?>
+                      <tr>
+                        <th>
+                          <?php if ($tentativa->finalizada): ?>
+                            <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-success btn-sm  m-btn m-btn--icon">
+                              <span>
+                                <i class="fa fa-search"></i>
+                                <span>Revisão</span>
+                              </span>
+                            </a>
+                          <?php else: ?>
+                            <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-primary btn-sm  m-btn m-btn--icon">
+                              <span>
+                                <i class="fa fa-edit"></i>
+                                <span>Continuar</span>
+                              </span>
+                            </a>
+                          <?php endif ?>
+                        </th>
+                        <th><?php echo $key+1; ?></th>
+                        <td><?php echo $tentativa->datahora; ?></td>
+                        <td><?php echo ($tentativa->finalizada)?'Sim, em '.$tentativa->finalizada_datahora:'Não'; ?></td>
+                        <td><?php echo $tentativa->nota; ?></td>
+                      </tr>
+                    <?php endforeach ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>

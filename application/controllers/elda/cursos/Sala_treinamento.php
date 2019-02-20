@@ -57,6 +57,109 @@ class sala_treinamento extends CI_Controller {
     exit();
   }
 
+  public function atividade($id_inscricao,$id_atividade)
+  {
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/index/'.$id_inscricao);
+    $data['diretorio'] = base_url().'assets/_UPLOADS/CURSOS/'.$curso_inscricao->id_curso.'/VIDEOS/';
+    $data['id_inscricao'] = $id_inscricao;
+    $data['id_atividade'] = $id_atividade;
+    $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
+    $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
+    $data['atividade'] = $this->curso_mod->get_atividade($id_atividade);
+    $data['tentativas'] = $this->curso_mod->get_inscricao_atividades($id_inscricao,$id_atividade);
+    $this->load->view('elda/cursos/sala_treinamento/atividade_grid',$data);
+  }
+
+  public function realizar_atividade($id_inscricao,$id_atividade,$id_inscricao_atividade=false)
+  {
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    $data['bloqueado'] = false;
+    $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/atividade/'.$id_inscricao.'/'.$id_atividade);
+    $data['diretorio'] = base_url().'assets/_UPLOADS/CURSOS/'.$curso_inscricao->id_curso.'/VIDEOS/';
+    $data['id_inscricao'] = $id_inscricao;
+    $data['id_atividade'] = $id_atividade;
+    $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
+    $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
+    $data['atividade'] = $this->curso_mod->get_atividade($id_atividade);
+
+    if (!$id_inscricao_atividade) {
+      $questoes = $this->curso_mod->get_questoes($id_atividade);
+      // Gera a prova unica e peresonalizada para o usuario
+      shuffle($questoes);
+      $atividade_questoes = array();
+      foreach ($questoes as $questao) {
+        $alternativas = array('a','b','c','d','e');
+        shuffle($alternativas);
+        $atividade_questoes[] = (object) array(
+          'id_questao' => $questao->id,
+          'enunciado' => $questao->enunciado,
+          'alternativa_correta' => $alternativas[0],
+          'alternativa_errada_1' => $alternativas[1],
+          'alternativa_errada_2' => $alternativas[2],
+          'alternativa_errada_3' => $alternativas[3],
+          'alternativa_errada_4' => $alternativas[4],
+          $alternativas[0] => $questao->alternativa_correta,
+          $alternativas[1] => $questao->alternativa_errada_1,
+          $alternativas[2] => $questao->alternativa_errada_2,
+          $alternativas[3] => $questao->alternativa_errada_3,
+          $alternativas[4] => $questao->alternativa_errada_4,
+        );
+      }
+      $json = json_encode($atividade_questoes);
+      // Gera o array para gravar no banco de dados
+      $data_atividade = array(
+        'id_inscricao' => $id_inscricao,
+        'id_atividade' => $id_atividade,
+        'atividade' => $json,
+        'finalizada' => false,
+        'datahora' => date('Y-m-d H:i:s'),
+      );
+      $data['id_inscricao_atividade'] = $this->curso_mod->grava_nova_tentativa_atividade($data_atividade);
+      $data['questoes'] = json_decode($json);
+    }
+    else {
+      // Busca os dados da tentativa iniciada anteriormente
+      $inscricao_atividade = $this->curso_mod->get_inscricao_atividade($id_inscricao_atividade);
+      $data['id_inscricao_atividade'] = $id_inscricao_atividade;
+      $data['questoes'] = json_decode($inscricao_atividade->atividade);
+      if ($inscricao_atividade->finalizada) {
+        $data['bloqueado'] = true;
+        $data['respostas'] = (array) json_decode($inscricao_atividade->respostas);
+      }
+    }
+    $data['url_form'] = 'elda/cursos/sala_treinamento/grava_respostas_atividade/';
+    $this->load->view('elda/cursos/sala_treinamento/atividade_form',$data);
+  }
+
+  public function grava_respostas_atividade()
+  {
+    $form = $this->input->post();
+    $respostas = $form['questao'];
+    $json_respostas = json_encode($respostas);
+    $id_inscricao_atividade = $form['id_inscricao_atividade'];
+    $inscricao_atividade = $this->curso_mod->get_inscricao_atividade($id_inscricao_atividade);
+    // Corrigir
+    $questoes = json_decode($inscricao_atividade->atividade);
+    $acertos = 0;
+    $total_questoes = count($questoes);
+    foreach ($questoes as $key) {
+      if ($key->alternativa_correta == $respostas[$key->id_questao])
+        $acertos ++;
+    }
+    $nota = round((($acertos*100)/$total_questoes), 2);
+
+    $data_atividade = array(
+      'finalizada' => true,
+      'respostas' => $json_respostas,
+      'finalizada_datahora' => date('Y-m-d H:i:s'),
+      'nota' => $nota,
+    );
+    $this->curso_mod->update_inscricao_atividade($id_inscricao_atividade,$data_atividade);
+    $this->atividade($inscricao_atividade->id_inscricao,$inscricao_atividade->id_atividade);
+  }
+
+
   // public function ajax_incricao()
   // {
   //   $id_curso = $this->input->post('id_curso');
