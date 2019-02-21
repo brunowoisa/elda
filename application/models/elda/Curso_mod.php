@@ -132,14 +132,17 @@ Class curso_mod extends CI_Model {
 
   public function get_progresso_cursos($id_usuario)
   {
-    $cursos = $this->db->select('curso.*')
+    $cursos = $this->db->select('curso.*, inscricao.id as id_inscricao')
                        ->from('inscricao')
                        ->join('curso', 'curso.id = inscricao.id_curso')
                        ->where('inscricao.id_usuario', $id_usuario)
+                       ->order_by('inscricao.id', 'desc')
                        ->get()->result();
     $ret = array();
     foreach ($cursos as $key => $curso) {
       $ret[$key]['curso'] = $curso;
+      
+      // Vídeos
       $t_a = $this->db->from('inscricao_video_assistido')
                       ->join('inscricao', 'inscricao.id = inscricao_video_assistido.id_inscricao')
                       ->where('inscricao.id_curso', $curso->id)
@@ -148,11 +151,77 @@ Class curso_mod extends CI_Model {
       $t_c = $this->db->from('curso_unidade_video')
                       ->join('curso_unidade', 'curso_unidade.id = curso_unidade_video.id_curso_unidade')
                       ->where('curso_unidade.id_curso', $curso->id)
+                      ->where('curso_unidade_video.ativo', '1')
                       ->count_all_results();
-      $ret[$key]['progresso'] = ($t_a * 100)/$t_c;
+      if ($t_c == 0)
+        $ret[$key]['progresso_videos'] = 0;
+      else
+        $ret[$key]['progresso_videos'] = round(($t_a * 100)/$t_c);
+
+      // Atividades
+      $total_atividades_aptas = count($this->get_array_atividades_concluidas($curso->id_inscricao));
+      $total_atividades = $this->db->from('curso_unidade_atividade')
+                                   ->join('curso_unidade', 'curso_unidade.id = curso_unidade_atividade.id_curso_unidade')
+                                   ->where('curso_unidade.id_curso', $curso->id)
+                                   ->where('curso_unidade_atividade.ativo', '1')
+                                   ->where('curso_unidade_atividade.obrigatoria', '1')
+                                   ->count_all_results();
+      if ($total_atividades == 0)
+        $ret[$key]['progresso_atividades'] = 0;
+      else
+        $ret[$key]['progresso_atividades'] = ($total_atividades_aptas * 100)/$total_atividades;
+
+      // Progresso Geral
+      $total_atingidas = $t_a + $total_atividades_aptas;
+      $total_requisitos = $t_c + $total_atividades;
+      if ($total_requisitos == 0) 
+        $ret[$key]['progresso'] = 0;
+      else 
+        $ret[$key]['progresso'] = round(($total_atingidas * 100)/$total_requisitos);
+
       $ret[$key] = (object) $ret[$key];
     }
     return $ret;
+  }
+
+  public function get_progresso_curso($id_inscricao)
+  {
+    $curso_inscricao = $this->get_curso_incricao($id_inscricao);
+
+    // Vídeos
+    $t_a = count($this->get_array_videos_assistidos($id_inscricao));
+    $t_c = $this->db->from('curso_unidade_video')
+                    ->join('curso_unidade', 'curso_unidade.id = curso_unidade_video.id_curso_unidade')
+                    ->where('curso_unidade.id_curso', $curso_inscricao->id_curso)
+                    ->where('curso_unidade_video.ativo', '1')
+                    ->count_all_results();
+    if ($t_c == 0)
+      $ret['progresso_videos'] = 0;
+    else
+      $ret['progresso_videos'] = round(($t_a * 100)/$t_c);
+
+    // Atividades
+    $total_atividades_aptas = count($this->get_array_atividades_concluidas($id_inscricao));
+    $total_atividades = $this->db->from('curso_unidade_atividade')
+                                 ->join('curso_unidade', 'curso_unidade.id = curso_unidade_atividade.id_curso_unidade')
+                                 ->where('curso_unidade.id_curso', $curso_inscricao->id_curso)
+                                 ->where('curso_unidade_atividade.ativo', '1')
+                                 ->where('curso_unidade_atividade.obrigatoria', '1')
+                                 ->count_all_results();
+    if ($total_atividades == 0)
+      $ret['progresso_atividades'] = 0;
+    else
+      $ret['progresso_atividades'] = round(($total_atividades_aptas * 100)/$total_atividades);
+
+    // Progresso Geral
+    $total_atingidas = $t_a + $total_atividades_aptas;
+    $total_requisitos = $t_c + $total_atividades;
+    if ($total_requisitos == 0)
+      $ret['progresso'] = 0;
+    else
+      $ret['progresso'] = round(($total_atingidas * 100)/$total_requisitos);
+
+    return (object) $ret;
   }
 
   public function get_array_videos_assistidos($id_inscricao)
@@ -179,19 +248,79 @@ Class curso_mod extends CI_Model {
     return $res;
   }
 
+  public function get_array_atividades_concluidas($id_inscricao)
+  {
+    $this->db->select('inscricao_atividade.id_atividade')
+             ->from('inscricao_atividade')
+             ->join('curso_unidade_atividade', 'curso_unidade_atividade.id = inscricao_atividade.id_atividade')
+             ->where('inscricao_atividade.id_inscricao', $id_inscricao)
+             ->where('curso_unidade_atividade.obrigatoria', '1')
+             ->group_by('inscricao_atividade.id_atividade');
+    $tentativas = $this->db->get()->result();
+    $res = array();
+    foreach ($tentativas as $key) {
+      $ultima_tentativa = $this->db->select('*')
+                                   ->from('inscricao_atividade')
+                                   ->where('id_atividade', $key->id_atividade)
+                                   ->where('id_inscricao', $id_inscricao)
+                                   ->order_by('id', 'desc')
+                                   ->limit('1')
+                                   ->get()->row();
+      if ($ultima_tentativa->finalizada && $ultima_tentativa->nota >= 70)
+        $res[] = $key->id_atividade;
+    }
+    return $res;
+  }
+
+  public function get_quadro_notas($id_inscricao)
+  {
+    $this->db->select('id_atividade')
+             ->from('inscricao_atividade')
+             ->where('id_inscricao', $id_inscricao)
+             ->group_by('id_atividade');
+    $tentativas = $this->db->get()->result();
+    $res = array();
+    foreach ($tentativas as $key) {
+      $ultima_tentativa = $this->db->select('id
+                                            ,DATE_FORMAT(datahora, "%d/%m/%Y %H:%i:%s") as datahora
+                                            ,id_atividade
+                                            ,finalizada
+                                            ,DATE_FORMAT(finalizada_datahora, "%d/%m/%Y %H:%i:%s") as finalizada_datahora
+                                            ,nota')
+                                   ->from('inscricao_atividade')
+                                   ->where('id_atividade', $key->id_atividade)
+                                   ->where('id_inscricao', $id_inscricao)
+                                   ->order_by('id', 'desc')
+                                   ->limit('1')
+                                   ->get()->row();
+      $res[$ultima_tentativa->id_atividade] = $ultima_tentativa;
+    }
+    return $res;
+  }
+
+  public function get_atividades_curso($id_curso)
+  {
+    $this->db->select('curso_unidade_atividade.*')
+             ->from('curso_unidade_atividade')
+             ->join('curso_unidade', 'curso_unidade.id = curso_unidade_atividade.id_curso_unidade')
+             ->where('curso_unidade.id_curso', $id_curso);
+    return $this->db->get()->result();
+  }
+
   public function get_inscricoes_usuario($id_usuario)
   {
     $this->db->select('inscricao.*
                       ,curso.titulo as curso')
              ->from('inscricao')
              ->join('curso', 'curso.id = inscricao.id_curso')
-             ->where('inscricao.id_usuario', $id_usuario);
+             ->where('inscricao.id_usuario', $id_usuario)
+             ->order_by('inscricao.id', 'desc');
     return $this->db->get()->result();
   }
 
   public function get_curso_incricao($id_inscricao)
   {
-    $this->db->select('*')
+    $this->db->select('*, DATE_FORMAT(concluido_datahora, "%d/%m/%Y") as concluido_data')
              ->from('inscricao')
              ->where('id', $id_inscricao);
     return $this->db->get()->row();
@@ -607,6 +736,22 @@ Class curso_mod extends CI_Model {
              ->where('id_inscricao', $id_inscricao)
              ->where('id_atividade', $id_atividade);
     return $this->db->get()->result();
+  }
+
+  public function finaliza_treinamento($id_inscricao)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'concluido' => true,
+        'concluido_datahora' => date('Y-m-d H:i:s'),
+      );
+      $this->db->where('id', $id_inscricao);
+      $this->db->update('inscricao', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
   }
 
 }

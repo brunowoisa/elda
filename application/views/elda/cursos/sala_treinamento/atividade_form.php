@@ -21,50 +21,7 @@
 
 <div class="row">
   <div class="col-sm-3">
-    <div class="m-demo" data-code-preview="true" data-code-html="true" data-code-js="false">
-      <div class="m-demo__preview">
-        <ul class="m-nav">
-          <li class="m-nav__section m-nav__section--first">
-            <span class="m-nav__section-text"><?php echo $curso->titulo; ?>
-          <li class="m-nav__item">
-            <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/index/<?php echo $id_inscricao; ?>" class="m-nav__link">
-              <i class="m-nav__link-icon flaticon-presentation-1"></i>
-              <span class="m-nav__link-text">Treinamento</span>
-            </a>
-          </li>
-          <li class="m-nav__item">
-            <a href="" class="m-nav__link">
-              <i class="m-nav__link-icon flaticon-list-2"></i>
-              <span class="m-nav__link-text">Quadro de Notas</span>
-            </a>
-          </li>
-          <li class="m-nav__item">
-            <a href="" class="m-nav__link">
-              <i class="m-nav__link-icon flaticon-interface-10"></i>
-              <span class="m-nav__link-text">Certificado</span>
-            </a>
-          </li>
-          <li class="m-nav__item">
-            <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/" class="m-nav__link">
-              <i class="m-nav__link-icon flaticon-logout"></i>
-              <span class="m-nav__link-text">Sair do Treinamento</span>
-            </a>
-          </li>
-          <li class="m-nav__separator m-nav__separator--fit"></li>
-          <li class="m-nav__section">
-            <span class="m-nav__section-text">Meus Cursos</span>
-          </li>
-          <?php foreach ($inscricoes as $key): ?>
-            <li class="m-nav__item">
-              <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/index/<?php echo $key->id; ?>" class="m-nav__link">
-                <i class="m-nav__link-icon la la-long-arrow-right"></i>
-                <span class="m-nav__link-text"><?php echo $key->curso; ?></span>
-              </a>
-            </li>
-          <?php endforeach ?>
-        </ul>
-      </div>
-    </div>
+    <?php include('include_menu_lateral.php'); ?>
   </div>
   <div class="col-sm-9">
     <?php 
@@ -109,9 +66,11 @@
               <form id="form" class="m-form m-form--state" action="<?php echo base_url().$url_form; ?>" method="POST">
                 <input type="hidden" name="id_inscricao_atividade" value="<?php echo $id_inscricao_atividade; ?>">
                 <?php 
-                $resp = array();
-                foreach ($respostas as $key => $value) {
-                  $resp[$key] = $value;
+                if ($bloqueado) {
+                  $resp = array();
+                  foreach ($respostas as $key => $value) {
+                    $resp[$key] = $value;
+                  }
                 }
                 ?>
                 <?php foreach ($questoes as $key => $questao): ?>
@@ -124,23 +83,23 @@
                     <div class="col-sm-12" style="margin-top:25px;">
                       <p>
                         <label class="m-radio m-radio--bold m-radio--state-brand">
-                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_a" name="questao[<?php echo $questao->id_questao; ?>]" value="a" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'a')?'checked disabled':'disabled'; ?>> <strong>A - </strong><?php echo $questao->a; ?>
+                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_a" name="questao[<?php echo $questao->id_questao; ?>]" value="a" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'a')?'checked':''; ?> <?php echo ($bloqueado)?'disabled':''; ?>> <strong>A - </strong><?php echo $questao->a; ?>
                           <span></span>
                         </label><br>
                         <label class="m-radio m-radio--bold m-radio--state-brand">
-                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_b" name="questao[<?php echo $questao->id_questao; ?>]" value="b" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'b')?'checked disabled':'disabled'; ?>> <strong>B - </strong><?php echo $questao->b; ?>
+                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_b" name="questao[<?php echo $questao->id_questao; ?>]" value="b" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'b')?'checked':''; ?> <?php echo ($bloqueado)?'disabled':''; ?>> <strong>B - </strong><?php echo $questao->b; ?>
                           <span></span>
                         </label><br>
                         <label class="m-radio m-radio--bold m-radio--state-brand">
-                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_c" name="questao[<?php echo $questao->id_questao; ?>]" value="c" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'c')?'checked disabled':'disabled'; ?>> <strong>C - </strong><?php echo $questao->c; ?>
+                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_c" name="questao[<?php echo $questao->id_questao; ?>]" value="c" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'c')?'checked':''; ?> <?php echo ($bloqueado)?'disabled':''; ?>> <strong>C - </strong><?php echo $questao->c; ?>
                           <span></span>
                         </label><br>
                         <label class="m-radio m-radio--bold m-radio--state-brand">
-                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_d" name="questao[<?php echo $questao->id_questao; ?>]" value="d" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'd')?'checked disabled':'disabled'; ?>> <strong>D - </strong><?php echo $questao->d; ?>
+                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_d" name="questao[<?php echo $questao->id_questao; ?>]" value="d" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'd')?'checked':''; ?> <?php echo ($bloqueado)?'disabled':''; ?>> <strong>D - </strong><?php echo $questao->d; ?>
                           <span></span>
                         </label><br>
                         <label class="m-radio m-radio--bold m-radio--state-brand">
-                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_e" name="questao[<?php echo $questao->id_questao; ?>]" value="e" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'e')?'checked disabled':'disabled'; ?>> <strong>E - </strong><?php echo $questao->e; ?>
+                          <input type="radio" id="q_<?php echo $questao->id_questao; ?>_e" name="questao[<?php echo $questao->id_questao; ?>]" value="e" <?php echo ($bloqueado && $resp[$questao->id_questao] == 'e')?'checked':''; ?> <?php echo ($bloqueado)?'disabled':''; ?>> <strong>E - </strong><?php echo $questao->e; ?>
                           <span></span>
                         </label>
                       </p>

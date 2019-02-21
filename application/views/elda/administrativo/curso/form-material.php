@@ -72,14 +72,6 @@
               </span>
             </a>
           </div>
-            <!-- <video width="100%" controls>
-              <?php 
-              // $link = $diretorio.$form->video;
-              // $mime = mime_content_type($link);
-              ?>
-              <source src="<?php //echo $link; ?>" type="<?php //echo $mime; ?>">
-              Seu navegador não suporta Vídeos. Por favor atualize para a versão mais recente.
-            </video> -->
         <?php endif ?>
       </div>
 

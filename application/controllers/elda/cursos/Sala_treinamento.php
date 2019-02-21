@@ -1,4 +1,5 @@
 <?php
+use Com\Tecnick\Barcode\Barcode;
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class sala_treinamento extends CI_Controller {
@@ -8,11 +9,11 @@ class sala_treinamento extends CI_Controller {
     parent::__construct();
     $this->load->model('elda/curso_mod');
     $this->load->model('acesso_mod');
-    $this->acesso_mod->verifica_sessao();
   }
 
 	public function index($id_inscricao=false)
 	{
+    $this->acesso_mod->verifica_sessao();
     $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
     if ($id_inscricao) {
       $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
@@ -20,6 +21,7 @@ class sala_treinamento extends CI_Controller {
       $data['unidades'] = $this->curso_mod->get_unidades($curso_inscricao->id_curso);
       $data['videos_assistidos'] = $this->curso_mod->get_array_videos_assistidos($id_inscricao);
       $data['materiais_baixados'] = $this->curso_mod->get_array_materiais_baixados($id_inscricao);
+      $data['atividades_concluidas'] = $this->curso_mod->get_array_atividades_concluidas($id_inscricao);
       $data['curso_nao_setado'] = false;
       $data['id_inscricao'] = $id_inscricao;
     }
@@ -32,6 +34,7 @@ class sala_treinamento extends CI_Controller {
 
   public function assistir_video($id_inscricao,$id_video)
   {
+    $this->acesso_mod->verifica_sessao();
     $this->curso_mod->marca_video_assistido($id_inscricao,$id_video);
     $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
     $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/index/'.$id_inscricao);
@@ -45,6 +48,7 @@ class sala_treinamento extends CI_Controller {
 
   public function baixar_material_complementar($id_inscricao,$id_material)
   {
+    $this->acesso_mod->verifica_sessao();
     $this->curso_mod->marca_material_baixado($id_inscricao,$id_material);
     $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
     $material = $this->curso_mod->get_material($id_material);
@@ -59,6 +63,7 @@ class sala_treinamento extends CI_Controller {
 
   public function atividade($id_inscricao,$id_atividade)
   {
+    $this->acesso_mod->verifica_sessao();
     $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
     $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/index/'.$id_inscricao);
     $data['diretorio'] = base_url().'assets/_UPLOADS/CURSOS/'.$curso_inscricao->id_curso.'/VIDEOS/';
@@ -68,11 +73,13 @@ class sala_treinamento extends CI_Controller {
     $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
     $data['atividade'] = $this->curso_mod->get_atividade($id_atividade);
     $data['tentativas'] = $this->curso_mod->get_inscricao_atividades($id_inscricao,$id_atividade);
+    $data['curso_inscricao'] = $curso_inscricao;
     $this->load->view('elda/cursos/sala_treinamento/atividade_grid',$data);
   }
 
   public function realizar_atividade($id_inscricao,$id_atividade,$id_inscricao_atividade=false)
   {
+    $this->acesso_mod->verifica_sessao();
     $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
     $data['bloqueado'] = false;
     $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/atividade/'.$id_inscricao.'/'.$id_atividade);
@@ -134,6 +141,7 @@ class sala_treinamento extends CI_Controller {
 
   public function grava_respostas_atividade()
   {
+    $this->acesso_mod->verifica_sessao();
     $form = $this->input->post();
     $respostas = $form['questao'];
     $json_respostas = json_encode($respostas);
@@ -159,11 +167,87 @@ class sala_treinamento extends CI_Controller {
     $this->atividade($inscricao_atividade->id_inscricao,$inscricao_atividade->id_atividade);
   }
 
+  public function quadro_notas($id_inscricao)
+  {
+    $this->acesso_mod->verifica_sessao();
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/index/'.$id_inscricao);
+    $data['id_inscricao'] = $id_inscricao;
+    $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
+    $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
+    $data['quadro_notas'] = $this->curso_mod->get_quadro_notas($id_inscricao);
+    $data['atividades'] = $this->curso_mod->get_atividades_curso($curso_inscricao->id_curso);
+    $this->load->view('elda/cursos/sala_treinamento/quadro_notas',$data);
+  }
 
-  // public function ajax_incricao()
-  // {
-  //   $id_curso = $this->input->post('id_curso');
-  //   echo json_encode($this->curso_mod->inscrever($id_curso));
-  // }
+  public function certificado($id_inscricao)
+  {
+    $this->acesso_mod->verifica_sessao();
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    $data['links'] = array('voltar' => 'elda/cursos/sala_treinamento/index/'.$id_inscricao);
+    $data['id_inscricao'] = $id_inscricao;
+    $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
+    $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
+    $data['progresso'] = $this->curso_mod->get_progresso_curso($id_inscricao);
+    $this->load->view('elda/cursos/sala_treinamento/certificado',$data);
+  }
 
+  public function emitir_certificado($id_inscricao)
+  {
+    $this->acesso_mod->verifica_sessao();
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    if ($curso_inscricao->concluido) {
+      $this->imprimir_certificado($id_inscricao);
+    }
+    else {
+      $progresso = $this->curso_mod->get_progresso_curso($id_inscricao);
+      if ($progresso->progresso != 100)
+        echo "Você não está apto à emitir esse certificado.";
+      else {
+        $this->curso_mod->finaliza_treinamento($id_inscricao);
+        $this->imprimir_certificado($id_inscricao);
+      }
+    }
+  }
+
+  public function imprimir_certificado($id_inscricao)
+  {
+    $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+    $curso = $this->curso_mod->get_curso($curso_inscricao->id_curso);
+
+    $barcode = new Barcode();
+    $bobj = $barcode->getBarcodeObj(
+        'QRCODE,M',
+        'https://www.woisoft.com.br/elda/cursos/sala_treinamento/imprimir_certificado/'.$id_inscricao,
+        0,
+        0,
+        'black',
+        array(-1, -1, -1, -1)
+    )->setBackgroundColor('white');
+    $qrcode = $bobj->getPngData();
+
+    $pic = 'data://text/plain;base64,' . base64_encode($qrcode);
+    $info = getimagesize($pic);
+
+    $this->load->library('fpdf/fpdf');
+    $pdf = new FPDF('L', 'mm', 'A4');
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->SetMargins(5, 5, 5);
+    $pdf->Image(base_url().'assets/_IMAGES/Certificado.jpg', 0, 0, 0, 0, 'JPG');
+    $pdf->SetFont('Courier','',27);
+    $pdf->SetXY(25, 95);
+    $pdf->Cell(272,15,utf8_decode($this->session->userdata('usuario')->nome),0,1,'C');
+    $pdf->SetXY(25, 130);
+    $pdf->Cell(272,15,utf8_decode($curso->titulo),0,1,'C');
+    $pdf->SetFont('Courier','',14);
+    $pdf->SetXY(25, 155);
+    $pdf->Cell(272,15,utf8_decode($curso_inscricao->concluido_data),0,1,'C');
+
+    $pdf->image($pic, 277, 0, 20, 20, 'PNG');
+    $pdf->image($pic, 277, 190, 20, 20, 'PNG');
+    $pdf->image($pic, 22, 165, 43, 43, 'PNG');
+
+    $pdf->Output();
+  }
 }
