@@ -14,9 +14,32 @@ class sala_treinamento extends CI_Controller {
 	public function index($id_inscricao=false)
 	{
     $this->acesso_mod->verifica_sessao();
+    $mensagem = null;
     $data['inscricoes'] = $this->curso_mod->get_inscricoes_usuario($this->session->userdata('usuario')->id);
     if ($id_inscricao) {
+      $data['form'] = null;
+      $data['url_form'] = 'elda/cursos/sala_treinamento/index/'.$id_inscricao;
+      $form = $this->input->post();
+      if (!empty($form)) {
+        $form = (object) $form;
+        $this->form_validation->set_rules('avaliacao_nota', 'Nota', 'required');
+        if ($this->form_validation->run() == TRUE){
+          $res = $this->curso_mod->avaliar_curso($form,$id_inscricao);
+          if(!$res){
+            $mensagem = array('texto' => 'Houve um erro ao registrar a avaliação. Tente novamente!', 'tipo'  => 'SweetAlert', 'class' => 'error');
+            $data['form'] = $form;
+          }
+          else{
+            $mensagem = array('texto' => 'Avaliação registrada com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
+          }
+        }
+        else{
+          $mensagem = array('texto' => validation_errors(), 'tipo'  => 'SweetAlert', 'class' => 'warning');
+          $data['form'] = $form;
+        }
+      }
       $curso_inscricao = $this->curso_mod->get_curso_incricao($id_inscricao);
+      $data['curso_inscricao'] = $curso_inscricao;
       $data['curso'] = $this->curso_mod->get_curso($curso_inscricao->id_curso);
       $data['unidades'] = $this->curso_mod->get_unidades($curso_inscricao->id_curso);
       $data['videos_assistidos'] = $this->curso_mod->get_array_videos_assistidos($id_inscricao);
@@ -29,6 +52,7 @@ class sala_treinamento extends CI_Controller {
       $data['progressos'] = $this->curso_mod->get_progresso_cursos($this->session->userdata('usuario')->id);
       $data['curso_nao_setado'] = true;
     }
+    $this->load->view('mensagens',$mensagem);
     $this->load->view('elda/cursos/sala_treinamento/grid',$data);
   }
 

@@ -21,7 +21,8 @@
       <div class="col-sm-4">  
         <h5 class="m--font-info">Usuários</h5>
         <div class="m-section__content" style=" border-left: 4px solid #f7f7fa; padding: 17px;">
-          <p style="padding-bottom: 0; margin-bottom: 0;"><a href="<?php echo base_url(); ?>elda/administrativo/Usuario/" class="m-link m-link--state m-link--info"><i class="fa fa-chevron-right"></i> Cadastro de Usuários</a></p>
+          <p><a href="<?php echo base_url(); ?>elda/administrativo/Usuario/" class="m-link m-link--state m-link--info"><i class="fa fa-chevron-right"></i> Cadastro de Usuários</a></p>
+          <p style="padding-bottom: 0; margin-bottom: 0;"><a href="<?php echo base_url(); ?>elda/administrativo/Usuario/relatorio/" class="m-link m-link--state m-link--info"><i class="fa fa-chevron-right"></i> Relatório de Desempenho</a></p>
         </div>
       </div>
 

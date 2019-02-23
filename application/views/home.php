@@ -6,7 +6,6 @@
   	<title>Elda</title>
     <meta name="description" content="Elda - Sistema de Treinamentos">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <!--begin::Web font -->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
     <script>
       WebFont.load({
@@ -16,31 +15,27 @@
         }
       });
     </script>
-    <!--end::Web font -->
     <link href="<?php echo base_url(); ?>assets/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/demo/demo5/base/style.bundle.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/vendors/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-
-
-    <!-- Favicon -->
-	  <link rel="apple-touch-icon" sizes="57x57" href="<?php echo base_url(); ?>assets/favicon/apple-icon-57x57.png">
-	  <link rel="apple-touch-icon" sizes="60x60" href="<?php echo base_url(); ?>assets/favicon/apple-icon-60x60.png">
-	  <link rel="apple-touch-icon" sizes="72x72" href="<?php echo base_url(); ?>assets/favicon/apple-icon-72x72.png">
-	  <link rel="apple-touch-icon" sizes="76x76" href="<?php echo base_url(); ?>assets/favicon/apple-icon-76x76.png">
-	  <link rel="apple-touch-icon" sizes="114x114" href="<?php echo base_url(); ?>assets/favicon/apple-icon-114x114.png">
-	  <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url(); ?>assets/favicon/apple-icon-120x120.png">
-	  <link rel="apple-touch-icon" sizes="144x144" href="<?php echo base_url(); ?>assets/favicon/apple-icon-144x144.png">
-	  <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url(); ?>assets/favicon/apple-icon-152x152.png">
-	  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url(); ?>assets/favicon/apple-icon-180x180.png">
-	  <link rel="icon" type="image/png" sizes="192x192"  href="<?php echo base_url(); ?>assets/favicon/android-icon-192x192.png">
-	  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo base_url(); ?>assets/favicon/favicon-32x32.png">
-	  <link rel="icon" type="image/png" sizes="96x96" href="<?php echo base_url(); ?>assets/favicon/favicon-96x96.png">
-	  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/favicon/favicon-16x16.png">
-	  <link rel="manifest" href="<?php echo base_url(); ?>assets/favicon/manifest.json">
-	  <meta name="msapplication-TileColor" content="#ffffff">
-	  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-	  <meta name="theme-color" content="#ffffff">
+	  <link rel="apple-touch-icon" sizes="57x57" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="<?php echo base_url(); ?>assets/_IMAGES/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/favicon-16x16.png">
+    <link rel="manifest" href="<?php echo base_url(); ?>assets/_IMAGES/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="<?php echo base_url(); ?>assets/_IMAGES/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
     <style>
       /* Start by setting display:none to make this hidden.
@@ -118,8 +113,8 @@
 							<div class="m-stack__item m-brand">
 							  <div class="m-stack m-stack--ver m-stack--general m-stack--inline">
 							    <div class="m-stack__item m-stack__item--middle m-brand__logo">
-							      <a href="index.html" class="m-brand__logo-wrapper">
-							        <img alt="<?php //echo $this->session->userdata('sistema')->nome; ?>" style="height: 50px;" src="<?php echo base_url(); ?>assets/app/media/img/logos/Elda.png"/>
+							      <a href="home" class="m-brand__logo-wrapper">
+							        <img alt="Elda Treinamentos" style="height: 50px;" src="<?php echo base_url(); ?>assets/app/media/img/logos/Elda.png"/>
 							      </a>  
 							    </div>
 							    <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -247,21 +242,23 @@
                       }
 	                  </style>
                       <li class="m-menu__item  m-menu__item--active"  aria-haspopup="true">
-                        <a  href="home" class="m-menu__link">
+                        <a href="home" class="m-menu__link">
                           <span class="m-menu__item-here" style="color: #54a17c;"></span>
                           <span class="m-menu__link-text" style="text-align: center;">
                             <i class="flaticon-home-1" style="font-size: 30px;"></i><br>Início
                           </span>
                         </a>
                       </li>
-                      <li class="m-menu__item"  aria-haspopup="true">
-	                      <a  href="<?php echo base_url(); ?>elda/menu/administrativo/" class="m-menu__link">
-	                        <span class="m-menu__item-here" style="color: #54a17c;"></span>
-	                        <span class="m-menu__link-text" style="text-align: center;">
-	                          <i class="flaticon-globe" style="font-size: 30px;"></i><br>Administrativo
-	                        </span>
-	                      </a>
-	                    </li>
+                      <?php if ($this->session->userdata('usuario')->administrador): ?>
+                        <li class="m-menu__item"  aria-haspopup="true">
+  	                      <a  href="<?php echo base_url(); ?>elda/menu/administrativo/" class="m-menu__link">
+  	                        <span class="m-menu__item-here" style="color: #54a17c;"></span>
+  	                        <span class="m-menu__link-text" style="text-align: center;">
+  	                          <i class="flaticon-globe" style="font-size: 30px;"></i><br>Administrativo
+  	                        </span>
+  	                      </a>
+  	                    </li>
+                      <?php endif ?>
                       <li class="m-menu__item"  aria-haspopup="true">
                         <a  href="<?php echo base_url(); ?>elda/cursos/catalogo/" class="m-menu__link">
                           <span class="m-menu__item-here" style="color: #54a17c;"></span>
@@ -339,11 +336,24 @@
 							<div class="d-flex align-items-center">
 								<div class="mr-auto">
 									<h3 id="titulo_pagina" class="m-subheader__title m-subheader__title--separator"></h3>			
+                  <script>
+                    window.onresize = function() {
+                      if ( $(window).width() < 1024) {
+                        $('#titulo_pagina').css('margin-top', '20px');
+                      }
+                      else {
+                        $('#titulo_pagina').css('margin-top', '0px');
+                      }
+                    }
+                    if( $(window).width() < 1024) {
+                      $('#titulo_pagina').css('margin-top', '20px');
+                    }
+                  </script>
 									<ul class="m-subheader__breadcrumbs m-nav m-nav--inline" id="breadcrumbs"></ul>
 								</div>
 							</div>
 						</div>
-          	<div id="html_ajax">
+          	<div id="html_ajax" style="height: 100%;">
               <?php include('elda/home.php'); ?>
             </div>
          	</div>

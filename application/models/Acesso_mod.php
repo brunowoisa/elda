@@ -16,7 +16,7 @@ Class acesso_mod extends CI_Model {
     $this->db->select('*')
              ->from('usuario')
              ->where('usuario.cpf', $form->cpf)
-             ->where('senha', md5($form->senha));
+             ->where('senha', $form->senha);
     $usuario = $this->db->get()->row();
     if ($usuario == null)
       return false;
@@ -37,31 +37,31 @@ Class acesso_mod extends CI_Model {
     return true;
   }
   
-  // /**
-  //  * @param  [object()]
-  //  * @return [sting] e_3 - CPF não encontrado
-  //  * @return [sting] e_4 - E-mail não enviado
-  //  * @return [sting] $email - E-mail enviado com sucesso
-  //  */
-  // public function recuperar_senha($form)
-  // {
-  //   $this->load->model('email_mod');
-  //   $form->cpf = limpa_cpf($form->cpf);
-  //   $this->db->select('*')
-  //            ->from('usuario')
-  //            ->where('usuario.cpf', $form->cpf);
-  //   $usuario = $this->db->get()->row();
-  //   if ($usuario == null)
-  //     return 'e_3';
-  //   else 
-  //   {
-  //     $msg = 'Olá!<br><br>Parece que você solictou a recuperação da sua senha de acesso ao sistema Elda:<br><br>CPF: '.$usuario->cpf.'<br>Senha: '.$usuario->senha.'<br><br>Caso você não tenha solicitado a recuperação, fique tranquilo, seus dados de acesso não serão alterados.<br>Este é um disparo automático do sistema, gentileza não responder.';
-  //     $res = $this->email_mod->envia_email($usuario->email_recuperacao_senha,'Recuperação de Senha - WoiSoft Sistemas',$msg,null,'bruno@woisoft.com.br');
-  //     if ($res) 
-  //       return $usuario->email_recuperacao_senha;
-  //     return 'e_4';
-  //   }
-  // }
+  /**
+   * @param  [object()]
+   * @return [sting] e_1 - CPF não encontrado
+   * @return [sting] e_2 - E-mail não enviado
+   * @return [sting] $email - E-mail enviado com sucesso
+   */
+  public function recuperar_senha($form)
+  {
+    $this->load->model('email_mod');
+    $form->cpf = limpa_cpf($form->cpf);
+    $this->db->select('*')
+             ->from('usuario')
+             ->where('usuario.cpf', $form->cpf);
+    $usuario = $this->db->get()->row();
+    if ($usuario == null)
+      return 'e_1';
+    else 
+    {
+      $message = 'Olá!<br><br>Parece que você solictou a recuperação da sua senha de acesso ao sistema Elda:<br><br>CPF: '.formata_cpf($usuario->cpf).'<br>Senha: '.$usuario->senha.'<br><br>Caso você não tenha solicitado a recuperação, fique tranquilo, seus dados de acesso não serão alterados.';
+      $res = $this->email_mod->envia_email($usuario->email,'Elda Treinamentos - Recuperação de Senha',$message,null,'bruno@woisoft.com.br');
+      if ($res) 
+        return $usuario->email;
+      return 'e_2';
+    }
+  }
 
   /**
    * @return [boolean] true - operação concluída

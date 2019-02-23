@@ -4,7 +4,6 @@ Class usuario_mod extends CI_Model {
   public function __construct()
   {
     parent::__construct();
-    // $this->db = $this->load->database('elda', TRUE);
   }
 
   public function get_usuarios()
@@ -16,33 +15,16 @@ Class usuario_mod extends CI_Model {
 
   public function count_ativos()
   {
-    $this->db->where('ativo', '1')
-             ->from('usuario');
-    return $this->db->count_all_results();
+    return count($this->get_usuarios_ativos());
   }
 
-  // public function verifica_usuario_pelo_cpf($cpf)
-  // {
-  //   $this->db->select('usuario.id, usuario.nome, usuario.apelido, usuario.cpf')
-  //            ->from('empresa_contrato_usuario')
-  //            ->join('usuario', 'usuario.id = empresa_contrato_usuario.id_usuario')
-  //            ->join('empresa_contrato', 'empresa_contrato.id = empresa_contrato_usuario.id_empresa_contrato')
-  //            ->where('empresa_contrato.id_sistema', $this->session->userdata('sistema')->id)
-  //            ->where('empresa_contrato.id_empresa', $this->session->userdata('empresa')->id)
-  //            ->where('usuario.cpf', limpa_cpf($cpf));
-  //   $res = $this->db->get()->row();
-  //   if (!$res) {
-  //     $this->db->select('id, nome, apelido, cpf')
-  //              ->from('usuario')
-  //              ->where('usuario.cpf', limpa_cpf($cpf));
-  //     $res = $this->db->get()->row();
-  //     if (!$res) {
-  //       return (object)['existente' => false, 'usuario' => null];
-  //     }
-  //     return (object)['existente' => false, 'usuario' => $res];
-  //   }
-  //   return (object)['existente' => true, 'usuario' => $res];
-  // }
+  public function get_usuarios_ativos()
+  {
+    $this->db->select('*')
+             ->where('ativo', '1')
+             ->from('usuario');
+    return $this->db->get()->result();
+  }
 
   public function get_usuario($id_usuario)
   {

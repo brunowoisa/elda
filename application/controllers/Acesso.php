@@ -37,19 +37,19 @@ class acesso extends CI_Controller {
         else
           $data['erro_validacao'] = validation_errors();
       }
-      // else{
-      //   if ($this->form_validation->run() == TRUE){
-      //     $res = $this->acesso_mod->recuperar_senha($form);
-      //     if ($res == 'e_3') 
-      //       $data['erro'] = 'CPF não encontrado. (E_3)';
-      //     elseif ($res == 'e_4') 
-      //       $data['erro'] = 'Erro ao enviar e-mail, por gentileza entre em contato com a nossa central de suporte. (E_4)';
-      //     else
-      //       $data['email_recuperacao_senha'] = $res;
-      //   }
-      //   else
-      //     $data['erro_validacao'] = validation_errors();
-      // }
+      else{
+        if ($this->form_validation->run() == TRUE){
+          $res = $this->acesso_mod->recuperar_senha($form);
+          if ($res == 'e_1') 
+            $data['erro'] = 'CPF não encontrado.';
+          elseif ($res == 'e_2') 
+            $data['erro'] = 'Houve um erro ao enviar o e-mail. Contate o Administrador do Sistema.';
+          else
+            $data['email_recuperacao_senha'] = $res;
+        }
+        else
+          $data['erro_validacao'] = validation_errors();
+      }
     }
 		$this->load->view('acesso/login', $data);
 	}

@@ -88,50 +88,50 @@
             <?php if ($tentativas): ?>
               <div class="row" style="padding:25px;">
                 <div class="col-sm-12">
-                  <table class="table table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <th>Ações</th>
-                        <th>Tentativa</th>
-                        <th>Criação</th>
-                        <th>Finalizada</th>
-                        <th>Nota</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php krsort($tentativas); ?>
-                      <?php foreach ($tentativas as $key => $tentativa): ?>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
                         <tr>
-                          <th>
-                            <?php if ($tentativa->finalizada): ?>
-                              <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-success btn-sm  m-btn m-btn--icon">
-                                <span>
-                                  <i class="fa fa-search"></i>
-                                  <span>Revisão</span>
-                                </span>
-                              </a>
-                            <?php elseif (!$curso_inscricao->concluido): ?>
-                              <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-primary btn-sm  m-btn m-btn--icon">
-                                <span>
-                                  <i class="fa fa-edit"></i>
-                                  <span>Continuar</span>
-                                </span>
-                              </a>
-                            <?php endif ?>
-                          </th>
-                          <th><?php echo $key+1; ?></th>
-                          <td><?php echo $tentativa->datahora; ?></td>
-                          <td><?php echo ($tentativa->finalizada)?'Sim, em '.$tentativa->finalizada_datahora:'Não'; ?></td>
-                          <td><?php echo $tentativa->nota; ?></td>
+                          <th>Ações</th>
+                          <th>Tentativa</th>
+                          <th>Criação</th>
+                          <th>Finalizada</th>
+                          <th>Nota</th>
                         </tr>
-                      <?php endforeach ?>
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        <?php krsort($tentativas); ?>
+                        <?php foreach ($tentativas as $key => $tentativa): ?>
+                          <tr>
+                            <th>
+                              <?php if ($tentativa->finalizada): ?>
+                                <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-success btn-sm  m-btn m-btn--icon">
+                                  <span>
+                                    <i class="fa fa-search"></i>
+                                    <span>Revisão</span>
+                                  </span>
+                                </a>
+                              <?php elseif (!$curso_inscricao->concluido): ?>
+                                <a href="<?php echo base_url(); ?>elda/cursos/sala_treinamento/realizar_atividade/<?php echo $id_inscricao; ?>/<?php echo $id_atividade; ?>/<?php echo $tentativa->id; ?>/" class="btn btn-outline-primary btn-sm  m-btn m-btn--icon">
+                                  <span>
+                                    <i class="fa fa-edit"></i>
+                                    <span>Continuar</span>
+                                  </span>
+                                </a>
+                              <?php endif ?>
+                            </th>
+                            <th><?php echo $key+1; ?></th>
+                            <td><?php echo $tentativa->datahora; ?></td>
+                            <td><?php echo ($tentativa->finalizada)?'Sim, em '.$tentativa->finalizada_datahora:'Não'; ?></td>
+                            <td><?php echo $tentativa->nota; ?></td>
+                          </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             <?php endif ?>
-
-
           </div>
         </div>
       </div>

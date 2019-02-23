@@ -12,39 +12,41 @@
     <?php $this->load->view('include/botoes',$links); ?>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1" style="width: 100%;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
-          <thead>
-            <tr>
-              <th style="width: 58px;">Ações</th>
-              <th>Título</th>
-              <th>Categoria</th>
-              <th>Instrutor</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($grid as $key): ?>
+        <div class="table-responsive">
+          <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1" style="width: 100%;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
+            <thead>
               <tr>
-                <td>
-                  <a href="<?php echo base_url(); ?>elda/administrativo/curso/estrutura_curso/<?php echo $key->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon">
-                    <span>
-                      <i class="fa fa-edit"></i>
-                      <span>Editar</span>
-                    </span>
-                  </a>
-                </td>
-                <td><?php echo $key->titulo; ?></td>
-                <td><?php echo $key->categoria; ?></td>
-                <td><?php echo $key->instrutor; ?></td>
-                <?php if ($key->ativo): ?>
-                  <td> <i class="fa fa-check-circle m--font-success"></i> Liberado para Usuários</td>
-                <?php else: ?>
-                  <td> <i class="fa fa-times-circle m--font-danger"></i> Bloqueado para Usuários</td>
-                <?php endif ?>
+                <th style="width: 58px;">Ações</th>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Instrutor</th>
+                <th>Status</th>
               </tr>
-            <?php endforeach ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach ($grid as $key): ?>
+                <tr>
+                  <td>
+                    <a href="<?php echo base_url(); ?>elda/administrativo/curso/estrutura_curso/<?php echo $key->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon">
+                      <span>
+                        <i class="fa fa-edit"></i>
+                        <span>Editar</span>
+                      </span>
+                    </a>
+                  </td>
+                  <td><?php echo $key->titulo; ?></td>
+                  <td><?php echo $key->categoria; ?></td>
+                  <td><?php echo $key->instrutor; ?></td>
+                  <?php if ($key->ativo): ?>
+                    <td> <i class="fa fa-check-circle m--font-success"></i> Liberado para Usuários</td>
+                  <?php else: ?>
+                    <td> <i class="fa fa-times-circle m--font-danger"></i> Bloqueado para Usuários</td>
+                  <?php endif ?>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

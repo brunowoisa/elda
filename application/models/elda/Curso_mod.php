@@ -196,7 +196,7 @@ Class curso_mod extends CI_Model {
                     ->where('curso_unidade_video.ativo', '1')
                     ->count_all_results();
     if ($t_c == 0)
-      $ret['progresso_videos'] = 0;
+      $ret['progresso_videos'] = '--';
     else
       $ret['progresso_videos'] = round(($t_a * 100)/$t_c);
 
@@ -209,9 +209,21 @@ Class curso_mod extends CI_Model {
                                  ->where('curso_unidade_atividade.obrigatoria', '1')
                                  ->count_all_results();
     if ($total_atividades == 0)
-      $ret['progresso_atividades'] = 0;
+      $ret['progresso_atividades'] = '--';
     else
       $ret['progresso_atividades'] = round(($total_atividades_aptas * 100)/$total_atividades);
+
+    // Materiais
+    $total_materiais_baixados = count($this->get_array_materiais_baixados($id_inscricao));
+    $total_materiais = $this->db->from('curso_unidade_material')
+                                 ->join('curso_unidade', 'curso_unidade.id = curso_unidade_material.id_curso_unidade')
+                                 ->where('curso_unidade.id_curso', $curso_inscricao->id_curso)
+                                 ->where('curso_unidade_material.ativo', '1')
+                                 ->count_all_results();
+    if ($total_materiais == 0)
+      $ret['progresso_materiais'] = '--';
+    else
+      $ret['progresso_materiais'] = round(($total_materiais_baixados * 100)/$total_materiais);
 
     // Progresso Geral
     $total_atingidas = $t_a + $total_atividades_aptas;
@@ -310,7 +322,10 @@ Class curso_mod extends CI_Model {
   public function get_inscricoes_usuario($id_usuario)
   {
     $this->db->select('inscricao.*
-                      ,curso.titulo as curso')
+                      ,curso.titulo as curso
+                      ,DATE_FORMAT(inscricao_datahora, "%d/%m/%Y %H:%i") as inscricao_datahora
+                      ,DATE_FORMAT(concluido_datahora, "%d/%m/%Y %H:%i") as concluido_datahora
+                      ,DATE_FORMAT(avaliacao_datahora, "%d/%m/%Y %H:%i") as avaliacao_datahora')
              ->from('inscricao')
              ->join('curso', 'curso.id = inscricao.id_curso')
              ->where('inscricao.id_usuario', $id_usuario)
@@ -744,6 +759,23 @@ Class curso_mod extends CI_Model {
       $data = array(
         'concluido' => true,
         'concluido_datahora' => date('Y-m-d H:i:s'),
+      );
+      $this->db->where('id', $id_inscricao);
+      $this->db->update('inscricao', $data);
+    $this->db->trans_complete();
+    if ($this->db->trans_status() === FALSE)
+      return false;
+    else
+      return true;
+  }
+
+  public function avaliar_curso($form,$id_inscricao)
+  {
+    $this->db->trans_start();
+      $data = array(
+        'avaliacao_nota' => $form->avaliacao_nota,
+        'avaliacao_comentario' => $form->avaliacao_comentario,
+        'avaliacao_datahora' => date('Y-m-d H:i:s'),
       );
       $this->db->where('id', $id_inscricao);
       $this->db->update('inscricao', $data);

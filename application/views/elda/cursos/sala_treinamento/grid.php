@@ -72,10 +72,6 @@
           </div>
         <?php endforeach ?>
       <?php else: ?>
-        <?php 
-        //epre($curso);
-        //epre($unidades);
-        ?>
         <style>
           .m-invoice-1 .m-invoice__wrapper .m-invoice__head .m-invoice__container .m-invoice__items {
             border-top: 1px solid #b9b9b9;
@@ -209,6 +205,59 @@
                     <?php endif ?>
                   <?php endforeach ?>
                 </div>
+                <div class="m-invoice__footer">
+                  <div class="m-invoice__container m-invoice__container--centered">
+                    <?php if ($curso_inscricao->avaliacao_nota): ?>
+                      <h3>Avaliar o Curso</h3>
+                      <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="m-alert__icon">
+                          <i class="flaticon-interface-2"></i>
+                          <span></span>
+                        </div>
+                        <div class="m-alert__text">
+                          Você já avaliou esse curso.
+                        </div>
+                      </div>
+                    <?php else: ?>
+                      <form class="m-form m-form--state" action="<?php echo base_url().$url_form; ?>" method="POST">
+                        <h3>Avaliar o Curso</h3>
+                        <div class="m-form__group form-group">
+                          <label>Qual nota você atribui para esse curso?</label>
+                          <div class="m-radio-inline" style="text-align: center;">
+                            <label class="m-radio">
+                              <input type="radio" name="avaliacao_nota" value="1"> 1
+                              <span></span>
+                            </label>
+                            <label class="m-radio" style="margin-left: 50px;">
+                              <input type="radio" name="avaliacao_nota" value="2"> 2
+                              <span></span>
+                            </label>
+                            <label class="m-radio" style="margin-left: 50px;">
+                              <input type="radio" name="avaliacao_nota" value="3"> 3
+                              <span></span>
+                            </label>
+                            <label class="m-radio" style="margin-left: 50px;">
+                              <input type="radio" name="avaliacao_nota" value="4"> 4
+                              <span></span>
+                            </label>
+                            <label class="m-radio" style="margin-left: 50px;">
+                              <input type="radio" name="avaliacao_nota" value="5"> 5
+                              <span></span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="m-form__group form-group">
+                          <label>Gostaria de deixar algum comentário?</label>
+                          <textarea name="avaliacao_comentario" class="form-control m-input m-input--square" rows="4"><?php echo set_form_value(false,$form,'avaliacao_comentario'); ?></textarea>
+                        </div>
+                        <div class="m-form__group form-group" style="text-align: right;">
+                          <button type="submit" class="btn m-btn--square  btn-outline-primary m-btn m-btn--custom">Enviar</button>
+                        </div>
+                      </form>
+                    <?php endif ?>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>

@@ -24,10 +24,6 @@
     <?php include('include_menu_lateral.php'); ?>
   </div>
   <div class="col-sm-9">
-    <?php 
-    //epre($curso);
-    //epre($unidades);
-    ?>
     <style>
       .m-invoice-1 .m-invoice__wrapper .m-invoice__head .m-invoice__container .m-invoice__items {
         border-top: 1px solid #b9b9b9;

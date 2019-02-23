@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://localhost/elda/acesso/ -->
+<html lang="pt-br" class="wf-poppins-n3-active wf-poppins-n4-active wf-poppins-n5-active wf-poppins-n6-active wf-poppins-n7-active wf-roboto-n3-active wf-roboto-n4-active wf-roboto-n5-active wf-roboto-n6-active wf-roboto-n7-active wf-active"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Elda Treinamentos</title>
+    <meta name="description" content="Latest updates and statistic charts">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <script src="./Elda Treinamentos_files/webfont.js.download"></script>
+    <link rel="stylesheet" href="./Elda Treinamentos_files/css" media="all"><script>
+      WebFont.load({
+        google: {"families":["Poppins:300,400,500,600,700","Roboto:300,400,500,600,700"]},
+        active: function() {
+            sessionStorage.fonts = true;
+        }
+      });
+    </script>
+    <link href="./Elda Treinamentos_files/vendors.bundle.css" rel="stylesheet" type="text/css">
+    <link href="./Elda Treinamentos_files/style.bundle.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="http://localhost/elda/assets/demo/default/media/img/logo/favicon.ico">
+  <style type="text/css">span.im-caret {
+    -webkit-animation: 1s blink step-end infinite;
+    animation: 1s blink step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        border-right-color: black;
+    }
+    50% {
+        border-right-color: transparent;
+    }
+}
+
+@-webkit-keyframes blink {
+    from, to {
+        border-right-color: black;
+    }
+    50% {
+        border-right-color: transparent;
+    }
+}
+
+span.im-static {
+    color: grey;
+}
+
+div.im-colormask {
+    display: inline-block;
+    border-style: inset;
+    border-width: 2px;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+div.im-colormask > input {
+    position: absolute;
+    display: inline-block;
+    background-color: transparent;
+    color: transparent;
+    -webkit-appearance: caret;
+    -moz-appearance: caret;
+    appearance: caret;
+    border-style: none;
+    left: 0; /*calculated*/
+}
+
+div.im-colormask > input:focus {
+    outline: none;
+}
+
+div.im-colormask > input::-moz-selection{
+    background: none;
+}
+
+div.im-colormask > input::selection{
+    background: none;
+}
+div.im-colormask > input::-moz-selection{
+    background: none;
+}
+
+div.im-colormask > div {
+    color: black;
+    display: inline-block;
+    width: 100px; /*calculated*/
+}</style><style type="text/css">/* Chart.js */
+@-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style></head>
+  <body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+    <div class="m-grid m-grid--hor m-grid--root m-page">
+      <div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--2 m-login-2--skin-3 m-login--signin" id="m_login" style="background-image: url(http://localhost/elda/assets/app/media/img/bg/gb8_3.png);">
+        <div class="m-grid__item m-grid__item--fluid  m-login__wrapper">
+          <div class="m-login__container">
+            <div class="m-login__logo">
+              <a href="http://localhost/elda/acesso/#">
+                <img src="./Elda Treinamentos_files/Elda2.png" style="max-width: 100%;">
+              </a>
+            </div>
+            <div class="m-login__signin animated flipInX">
+              <div class="m-login__head">
+                <h3 class="m-login__title">Acesso</h3>
+              </div>
+              <form class="m-login__form m-form" action="http://localhost/elda/acesso/" method="POST">
+                <div class="form-group m-form__group">
+                  <input type="hidden" name="action" value="L">
+                  <input class="form-control m-input" type="text" placeholder="CPF" name="cpf" autocomplete="off" data-inputmask="&#39;mask&#39;: &#39;999.999.999-99&#39;">
+                </div>
+                <div class="form-group m-form__group">
+                  <input class="form-control m-input" type="password" placeholder="Senha" name="senha">
+                </div>
+                <div class="row m-login__form-sub">
+                  <div class="col m--align-right m-login__form-right">
+                    <a href="javascript:;" id="m_login_forget_password" class="m-link" style="color: #5d823b;">Recuperar Senha</a>
+                  </div>
+                </div>
+                <div class="m-login__form-action">
+                  <button id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn">Acessar</button>
+                </div>
+              </form>
+            </div>
+            <div class="m-login__forget-password animated flipInX">
+              <div class="m-login__head">
+                <h3 class="m-login__title">Esqueceu sua senha?</h3>
+                <div class="m-login__desc">Informe seu CPF para recuperar seu acesso.</div>
+              </div>
+              <form class="m-login__form m-form" action="http://localhost/elda/acesso/" method="POST">
+                <div class="form-group m-form__group">
+                  <input type="hidden" name="action" value="E">
+                  <input class="form-control m-input" type="text" placeholder="CPF" name="cpf" autocomplete="off" data-inputmask="&#39;mask&#39;: &#39;999.999.999-99&#39;">
+                </div>
+                <div class="m-login__form-action">
+                  <button id="m_login_forget_password_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary">Recuperar</button>&nbsp;&nbsp;
+                  <button id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom  m-login__btn">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./Elda Treinamentos_files/vendors.bundle.js.download" type="text/javascript"></script>
+    <script src="./Elda Treinamentos_files/scripts.bundle.js.download" type="text/javascript"></script>
+    <script src="./Elda Treinamentos_files/login.js.download" type="text/javascript"></script>
+    <script src="./Elda Treinamentos_files/sweetalert2.js.download" type="text/javascript"></script>
+    <script>
+      $('input[data-inputmask]').inputmask();    
+                      </script>
+  
+</body></html>

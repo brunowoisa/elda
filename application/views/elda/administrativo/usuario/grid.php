@@ -12,45 +12,47 @@
     <?php $this->load->view('include/botoes',$links); ?>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1" style="width: 100%;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
-          <thead>
-            <tr>
-              <th style="width: 58px;">Ações</th>
-              <th>Nome</th>
-              <th>CPF</th>
-              <th>Tipo de Usuário</th>
-              <th>E-mail</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($grid as $key): ?>
+        <div class="table-responsive">
+          <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1" style="width: 100%;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
+            <thead>
               <tr>
-                <td>
-                  <a href="<?php echo base_url(); ?>elda/administrativo/usuario/editar/<?php echo $key->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon">
-                    <span>
-                      <i class="fa fa-edit"></i>
-                      <span>Editar</span>
-                    </span>
-                  </a>
-                </td>
-                <td><?php echo $key->nome; ?></td>
-                <td><?php echo formata_cpf($key->cpf); ?></td>
-                <?php if ($key->administrador): ?>
-                  <td><i class="fa fa-user-shield"></i> Administrador</td>
-                <?php else: ?>
-                  <td>Funcionário</td>
-                <?php endif ?>
-                <td><?php echo $key->email; ?></td>
-                <?php if ($key->ativo): ?>
-                  <td> <i class="fa fa-check-circle m--font-success"></i> Ativo</td>
-                <?php else: ?>
-                  <td> <i class="fa fa-times-circle m--font-danger"></i> Inativo</td>
-                <?php endif ?>
+                <th style="width: 58px;">Ações</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Tipo de Usuário</th>
+                <th>E-mail</th>
+                <th>Status</th>
               </tr>
-            <?php endforeach ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach ($grid as $key): ?>
+                <tr>
+                  <td>
+                    <a href="<?php echo base_url(); ?>elda/administrativo/usuario/editar/<?php echo $key->id; ?>/" class="btn btn-outline-accent btn-sm  m-btn m-btn--icon">
+                      <span>
+                        <i class="fa fa-edit"></i>
+                        <span>Editar</span>
+                      </span>
+                    </a>
+                  </td>
+                  <td><?php echo $key->nome; ?></td>
+                  <td><?php echo formata_cpf($key->cpf); ?></td>
+                  <?php if ($key->administrador): ?>
+                    <td><i class="fa fa-user-shield"></i> Administrador</td>
+                  <?php else: ?>
+                    <td>Funcionário</td>
+                  <?php endif ?>
+                  <td><?php echo $key->email; ?></td>
+                  <?php if ($key->ativo): ?>
+                    <td> <i class="fa fa-check-circle m--font-success"></i> Ativo</td>
+                  <?php else: ?>
+                    <td> <i class="fa fa-times-circle m--font-danger"></i> Inativo</td>
+                  <?php endif ?>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
