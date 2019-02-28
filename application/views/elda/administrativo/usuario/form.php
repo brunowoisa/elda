@@ -51,7 +51,39 @@
       });
     }
   <?php endif ?>
-    
+  $('input[name="cpf"]').blur(function() {
+    <?php if ($editar): ?>
+      var id_usuario = '<?php echo $form->id; ?>';
+    <?php else: ?>
+      var id_usuario = 'novo';
+    <?php endif ?>
+    var cpf = $(this).val();
+    if (cpf != '') {
+      $.ajax({
+        url: '<?php echo base_url(); ?>elda/administrativo/usuario/ajax_verifica_usuario_pelo_cpf/',
+        type: 'POST',
+        dataType: 'json',
+        data: {cpf: cpf, id_usuario: id_usuario},
+      })
+      .done(function(data) {
+        if (! data) {
+          $('input[name="cpf"]').val('').focus();
+          swal({
+            title: "Atenção!",
+            html: "O CPF informado já está em uso!",
+            type: "warning"
+          });
+        }
+      })
+      .fail(function() {
+        swal({
+          title: "Erro!",
+          html: "Houve um erro ao verificar se o CPF já está em uso!",
+          type: "error"
+        });
+      });
+    }
+  });
 </script>
 <div class="m-portlet m-portlet--bordered m-portlet--unair">
   <div class="m-portlet__body">

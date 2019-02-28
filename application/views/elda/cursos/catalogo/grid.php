@@ -12,35 +12,35 @@
   });
 </script>
 
-<?php if ($grid): ?>
-  <form class="m-form m-form--state" action="<?php echo base_url().$url_form; ?>" method="POST">
-    <div class="row">
-      <div class="col-sm-3"></div>
-      <div class="col-sm-6">
-        <div class="row">
-          <div class="col-sm-10">
-            <div class="form-group">  
-              <input type="text" class="form-control m-input m-input--square form-control-sm" name="pesquisa" value="<?php echo $this->session->userdata('pesquisa_catalogo'); ?>" autocomplete="off" placeholder="Pesquisar">
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <button type="submit" id="btn_submit" class="btn m-btn--square btn-block btn-outline-info btn-sm"><i class="fa fa-search"></i></button>
+<form class="m-form m-form--state" action="<?php echo base_url().$url_form; ?>" method="POST">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-10">
+          <div class="form-group">  
+            <input type="text" class="form-control m-input m-input--square form-control-sm" name="pesquisa" value="<?php echo $this->session->userdata('pesquisa_catalogo'); ?>" autocomplete="off" placeholder="Pesquisar">
           </div>
         </div>
+        <div class="col-sm-2">
+          <button type="submit" id="btn_submit" class="btn m-btn--square btn-block btn-outline-info btn-sm"><i class="fa fa-search"></i></button>
+        </div>
       </div>
-      <div class="col-sm-3"></div>
     </div>
-    <script>
-      $('input[name="pesquisa"]').keyup(function(e) {
-        if ((e.which == 13 || e.keyCode == 13) ) { // Enter
-          $('#btn_submit').trigger('click');
-        }
-      });
-      $(document).ready(function() {
-        $('input[name="pesquisa"]').focus();
-      });
-    </script>
-  </form>
+    <div class="col-sm-3"></div>
+  </div>
+  <script>
+    $('input[name="pesquisa"]').keyup(function(e) {
+      if ((e.which == 13 || e.keyCode == 13) ) { // Enter
+        $('#btn_submit').trigger('click');
+      }
+    });
+    $(document).ready(function() {
+      $('input[name="pesquisa"]').focus();
+    });
+  </script>
+</form>
+<?php if ($grid): ?>
   <?php foreach ($grid as $curso): ?>
     <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
       <div class="m-portlet__head">
@@ -77,7 +77,7 @@
           <i class="flaticon-exclamation"></i>
         </div>
         <div class="m-alert__text">
-            <strong>Ops!</strong><br>Não há cursos disponíveis para inscrição no momento.
+            <strong>Ops!</strong><br>Não foram encontrados cursos disponíveis para inscrição.
         </div>  
       </div>
     </div>

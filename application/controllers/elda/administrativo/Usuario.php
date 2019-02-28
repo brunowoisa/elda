@@ -102,7 +102,8 @@ class usuario extends CI_Controller {
   public function ajax_verifica_usuario_pelo_cpf()
   {
     $cpf = $this->input->post('cpf');
-    echo json_encode($this->usuario_mod->verifica_usuario_pelo_cpf($cpf));
+    $id_usuario = $this->input->post('id_usuario');
+    echo json_encode($this->usuario_mod->verifica_usuario_pelo_cpf($cpf,$id_usuario));
   }
 
   public function ajax_enviar_senha_email()
@@ -115,6 +116,7 @@ class usuario extends CI_Controller {
   {
     $mensagem = null;
     $this->links['novo'] = '';
+    $this->links['voltar'] = '';
     $this->links['atualizar'] = 'elda/administrativo/usuario/relatorio/';
     $data = array(
       'links' => $this->links,

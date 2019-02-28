@@ -30,7 +30,10 @@ class acesso extends CI_Controller {
           }
           else
           {
-            $data['erro'] = 'Usuário ou Senha inválidos!';
+            if ($logou == 'e_1') 
+              $data['erro'] = 'CPF não encontrado.';
+            elseif ($logou == 'e_2') 
+              $data['erro'] = 'Seu usuário está inativado. Solicite ao administrador a ativação.';
             $data['form'] = $form;
           }
         }
@@ -42,7 +45,7 @@ class acesso extends CI_Controller {
           $res = $this->acesso_mod->recuperar_senha($form);
           if ($res == 'e_1') 
             $data['erro'] = 'CPF não encontrado.';
-          elseif ($res == 'e_2') 
+          elseif ($res == 'e_3') 
             $data['erro'] = 'Houve um erro ao enviar o e-mail. Contate o Administrador do Sistema.';
           else
             $data['email_recuperacao_senha'] = $res;
@@ -69,70 +72,6 @@ class acesso extends CI_Controller {
   {
     echo json_encode($this->acesso_mod->verifica_sessao_ajax());
   }
-
-  // public function configuracao_empresa()
-  // {
-  //   $this->verifica_sessao();
-  //   $diretorio = './assets/_UPLOADS/CLIENTES/'.$this->session->userdata('empresa')->id.'/LOGO/';
-  //   $diretorio_pagina = base_url().'assets/_UPLOADS/CLIENTES/'.$this->session->userdata('empresa')->id.'/LOGO/';
-  //   $mensagem = null;
-  //   $data = array(
-  //     'editar' => true,
-  //     'url_form' => 'acesso/configuracao_empresa',
-  //     'diretorio' => $diretorio_pagina,
-  //   );
-  //   $form = $this->input->post();
-  //   if (!empty($form)) {
-  //     $form = (object) $form;
-  //     $this->form_validation->set_rules('fantasia', 'Fantasia', 'required');
-  //     if ($this->form_validation->run() == TRUE){
-  //       $erro_upload = false;
-  //       $upload = array();
-  //       if(isset($_FILES['logo']) && $_FILES['logo']['name'][0] != null){
-  //         if (!is_dir($diretorio)) {
-  //           mkdir($diretorio, 0777, TRUE);
-  //         }
-  //         $filesCount = count($_FILES['logo']['name']);
-  //         for($i = 0; $i < $filesCount; $i++){
-  //           $_FILES['arq']['name'] = $_FILES['logo']['name'][$i];
-  //           $_FILES['arq']['type'] = $_FILES['logo']['type'][$i];
-  //           $_FILES['arq']['tmp_name'] = $_FILES['logo']['tmp_name'][$i];
-  //           $_FILES['arq']['error'] = $_FILES['logo']['error'][$i];
-  //           $_FILES['arq']['size'] = $_FILES['logo']['size'][$i];
-
-  //           $config['upload_path']          = $diretorio;
-  //           // $config['allowed_types']        = 'jpg|png|jpeg';
-  //           $config['allowed_types']        = 'jpg|jpeg';
-  //           $config['file_name']            = time();
-            
-  //           $this->load->library('upload', $config);
-  //           $this->upload->initialize($config);
-  //           if (!$this->upload->do_upload('arq')){
-  //             $data['error'] = $this->upload->display_errors();
-  //             $erro_upload = true;
-  //             $data['form'] = $form;
-  //           }
-  //           else{
-  //             $upload[] = $this->upload->data();
-  //           }
-  //         }
-  //       }
-  //       $res = $this->acesso_mod->editar_empresa_logada($form,$upload);
-  //       if(!$res){
-  //         $mensagem = array('texto' => 'Erro ao alterar registro! Tente novamente!', 'tipo'  => 'SweetAlert', 'class' => 'error');
-  //       }
-  //       else{
-  //         $mensagem = array('texto' => 'Registro alterado com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
-  //         $this->acesso_mod->seta_empresa($this->session->userdata('empresa')->id);
-  //       }
-  //     }
-  //     else
-  //       $mensagem = array('texto' => validation_errors(), 'tipo'  => 'SweetAlert', 'class' => 'warning');
-  //   }
-  //   $data['form'] = $this->acesso_mod->get_empresa_logada();
-  //   $this->load->view('mensagens',$mensagem);
-  //   $this->load->view('acesso/configuracao_empresa',$data);
-  // }
 
   public function configuracao_usuario()
   {
@@ -187,7 +126,8 @@ class acesso extends CI_Controller {
         else{
           $mensagem = array('texto' => 'Registro alterado com sucesso!', 'tipo'  => 'SweetAlert', 'class' => 'success');
           $this->acesso_mod->atualiza_sessao_usuario();
-          $this->load->view('acesso/script_atualiza_foto_usuario');
+          if ($upload)
+            $this->load->view('acesso/script_atualiza_foto_usuario');
         }
       }
       else
@@ -212,7 +152,7 @@ class acesso extends CI_Controller {
       $this->form_validation->set_rules('senha_atual', 'Senha Atual', 'required');
       $this->form_validation->set_rules('senha_nova_1', 'Nova Senha', 'required');
       $this->form_validation->set_rules('senha_nova_2', 'Confirmar Nova Senha', 'required');
-      if ($this->form_validation->run() == TRUE && md5($form->senha_atual) == $this->session->userdata('usuario')->senha){
+      if ($this->form_validation->run() == TRUE && $form->senha_atual == $this->session->userdata('usuario')->senha){
         $res = $this->acesso_mod->alterar_senha($form);
         if(!$res){
           $mensagem = array('texto' => 'Erro ao alterar registro! Tente novamente!', 'tipo'  => 'SweetAlert', 'class' => 'error');
@@ -222,7 +162,7 @@ class acesso extends CI_Controller {
           $this->acesso_mod->atualiza_sessao_usuario();
         }
       }
-      elseif (md5($form->senha_atual) != $this->session->userdata('usuario')->senha)
+      elseif ($form->senha_atual != $this->session->userdata('usuario')->senha)
         $mensagem = array('texto' => 'A senha digitada não é igual à senha atual!', 'tipo'  => 'SweetAlert', 'class' => 'warning');
       else
         $mensagem = array('texto' => validation_errors(), 'tipo'  => 'SweetAlert', 'class' => 'warning');

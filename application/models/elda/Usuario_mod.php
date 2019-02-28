@@ -38,6 +38,20 @@ Class usuario_mod extends CI_Model {
     return $res;
   }
 
+  public function verifica_usuario_pelo_cpf($cpf,$id_usuario)
+  {
+    $cpf = limpa_cpf($cpf);
+    $this->db->from('usuario')
+             ->where('cpf', $cpf);
+    if ($id_usuario != 'novo') 
+      $this->db->where('id !=', $id_usuario);
+    $qtd = $this->db->count_all_results();
+    if ($qtd == 0) 
+      return true;
+    else
+      return false;
+  }
+
   public function novo($form)
   {
     $this->db->trans_start();

@@ -19,11 +19,15 @@ Class acesso_mod extends CI_Model {
              ->where('senha', $form->senha);
     $usuario = $this->db->get()->row();
     if ($usuario == null)
-      return false;
+      return 'e_1'; // Inexistente
     else 
     {
-      $this->session->set_userdata('usuario', $usuario);
-      return true;
+      if ($usuario->ativo == '1') {
+        $this->session->set_userdata('usuario', $usuario);
+        return true;
+      }
+      else
+        return 'e_2'; // Inativo
     }
   }
 
@@ -52,14 +56,14 @@ Class acesso_mod extends CI_Model {
              ->where('usuario.cpf', $form->cpf);
     $usuario = $this->db->get()->row();
     if ($usuario == null)
-      return 'e_1';
+      return 'e_1'; // Inexistente
     else 
     {
       $message = 'Olá!<br><br>Parece que você solictou a recuperação da sua senha de acesso ao sistema Elda:<br><br>CPF: '.formata_cpf($usuario->cpf).'<br>Senha: '.$usuario->senha.'<br><br>Caso você não tenha solicitado a recuperação, fique tranquilo, seus dados de acesso não serão alterados.';
       $res = $this->email_mod->envia_email($usuario->email,'Elda Treinamentos - Recuperação de Senha',$message,null,'bruno@woisoft.com.br');
       if ($res) 
         return $usuario->email;
-      return 'e_2';
+      return 'e_3'; // Falha no envio do e-mail
     }
   }
 
