@@ -91,7 +91,6 @@ function unformatNumber(pNum){
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que trata os envios de formulário
  */
 $( document ).delegate($('input[type="submit"]') , 'click', function (event) {
@@ -115,7 +114,6 @@ $( document ).delegate($('input[type="submit"]') , 'click', function (event) {
 });
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que faz a requisição ajax das mudanças de página e exibe o html na div especificada
  */
 function ajax_html(destino, element){
@@ -170,7 +168,6 @@ function ajax_html(destino, element){
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * verifica se o cpf informado é válido
  * @param  {string}  cpf contém o cpf
  * @return {Boolean} informa o resultado da verificação
@@ -214,7 +211,6 @@ function isCpf(cpf) {
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * verifica se o cnpj informado é válido
  * @param  {string}  s contém o cnpj
  * @return {Boolean} informa o resultado da verificação
@@ -247,7 +243,6 @@ function isCnpj(s){
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * verifica se o documento informado é válido
  * @param  {string}  documento contém os numeros do documento
  * @return {Boolean} informa o resultado da verificação
@@ -282,7 +277,6 @@ function valida_cpf_cnpj(documento) {
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que faz a requisição ajax para o webservice viacep.com.br e retorna os dados referente ao cep informado
  */
 function busca_cep(cep){
@@ -311,7 +305,6 @@ function busca_cep(cep){
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que verifica se o PIS informado é válido
  */
 function valida_pis(numero) {
@@ -332,7 +325,6 @@ function valida_pis(numero) {
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que verifica se o PIS informado é válido
  */
 function isPis(pis) {
@@ -374,7 +366,6 @@ function isPis(pis) {
 }
 
 /**
- * FUNÇÃO VERIFICADA E UTILIZADA EM WOISOFT
  * função que verifica o valor informado é percentual válido (entre 0 e 100)
  */
 function valida_porcentagem(input) {
@@ -389,268 +380,3 @@ function valida_porcentagem(input) {
     input.val('0,00');
   }
 }
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/// FUNÇÕES AINDA NÃO VERIFICADAS (MAS PODEM ESTAR SENDO UTILIZADAS //////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-$( document ).on( "click", ".cancelar", function(e) {
-  //alert('b');
-  e.preventDefault();
-  ajax_html($(this).attr('href'), $(this));     
-});
-
-$( document ).on( "click", ".excluir", function(e) {
-   //alert('v');
-  e.preventDefault();
-  ajax_html($(this).attr('href'), $(this));     
-});
-
-  function Result(vCabecalho,vTexto, tipo){
-    if (tipo != 'undefined')
-      switch(tipo) {
-        case 'error':
-          $('#myModalWarning #CabecalhoDiv').html(vCabecalho);
-          $('#myModalWarning #MensagemDiv').html(vTexto);
-          $('#myModalWarning').modal('show');  
-        break;
-        case 'success':
-          $('#myModalSuccess #CabecalhoDiv').html(vCabecalho);
-          $('#myModalSuccess #MensagemDiv').html(vTexto);
-          $('#myModalSuccess').modal('show');  
-        break;
-      }
-  }
-  function Informar(vCabecalho,vTexto, tipo){
-    $('#myModalMensagem #CabecalhoDiv').html(vCabecalho);
-    $('#myModalMensagem #MensagemDiv').html(vTexto);
-
-    if (tipo != 'undefined')
-      switch(tipo) {
-        case 'error':
-          $('#myModalMensagem .custom-modal-icon.error').show();
-        break;
-        case 'success':
-          $('#myModalMensagem .custom-modal-icon.success').show();
-        break;
-      }
-    $('#myModalMensagem').modal('show');   
-  }
-
-
-  function Confirmar(vTipo,vId,vAux){
-    
-    var url= "Ajax/confirmar/"+vTipo+"/"+vId+"/"+vAux;
-    //alert(url);
-    
-    var request = $.ajax({
-      url: url,
-      type: "GET",
-      dataType: "json"
-    });
-     
-    //alert('2');
-    request.done(function(data) {
-    //alert('3');
-
-        $.each(data, function(i, c) { 
-          $('#myModalConfirma #CabecalhoDiv').html(c.cabecalho);
-          $('#myModalConfirma #MensagemDiv').html(c.mensagem);
-          $('#myModalConfirma #RunDiv').html(c.run);
-          $('#myModalConfirma').modal('show');   
-                });
-    });   
-  }
-
-  function ConfirmarRun(){
-    var vEndereco = $(".RunDiv").text();
-    //var RetData = $('#myModalConfirma input[name="campoderetorno"]').val();
-    var RetData = $('#campoderetorno').val();
-    
-    //alert(vEndereco);
-    //alert(RetData);
-    
-    if(RetData !== undefined){
-      if(RetData !== ''){
-          //alert(RetData);
-        vEndereco = vEndereco +'/'+ RetData;
-      } 
-    }
-    //alert(vEndereco);
-    
-    ajax_html(vEndereco);
-  }
-  
-  function SatReabre(pId,pTipo){
-    //alert(pTipo);
-    var url= "tccliente/Sat/Reabertura/"+pId+"/"+pTipo;
-    $.ajax({ url: url, type: "GET", dataType: "json" });
-    //alert(url);   
-  }
-  
-  
-  function SelecionaEmpresa(){
-    $('#myModalSelectEmp').modal('show');  
-  }
-  
-  function Relatorios(pForm,pLink,pdiv){
-    //alert(pForm);
-    //alert(pLink);
-    //alert(pdiv);
-    
-    $('#'+pForm).ajaxSubmit({
-        url : pLink, 
-        dataType: 'json',
-        beforeSubmit: function(formData, jqForm, options){
-                                      $("#"+pdiv).html("<img src='assets/img/aguarde.gif'/>");
-                                      //var queryString = $.param(formData);
-                                      //console.log('About to submit: \n' + queryString + '\n');
-                                      return true;                   
-                                     }, 
-        success: function(data){
-                                 $("#"+pdiv).html("");
-                                 //console.log("respose: " + data);
-                                //alert(data.arquivo);
-                  livs = data.baseurl+"Arquivo/DownloadArquivo/"+data.arquivo;
-                  //alert(livs);
-                  window.open(livs);
-                
-                  //echo '<td><button class="btn btn-success btn-xs" data-toggle="tooltip" title="" data-original-title="Baixar Arquivo..." onclick=""
-                  livs = data.baseurl+"Arquivo/ExcluirArquivo/";
-                  //alert(livs);
-                /*
-                $('form').ajaxForm({ url: livs,
-                  data: { opath: data.arquivo
-                                }, 
-                  success: function(data){
-                     
-                  },
-                        error:function(){
-                mensagem('Ajax','Não foi possível executar Excluir !'+error);
-                        } 
-                      }).submit();
-                  */                                                              
-                          
-                                 
-                               },
-        error: function(data){
-                               $("#"+pdiv).html("");
-
-                 //var resultado="";
-                 //for (propriedade in data) {
-                 //resultado += propriedade + ": " + data[propriedade] + "\n"; 
-                 //};
-                 
-                               Informar('Erro na requisição','Não foi possível executar ação :( '+"<br><br>responseText:"+data['responseText']+'<br>StatusText:'+data['statusText']+'<br>Status:'+data['status']);
-                             }
-    });
-    return false;
-    
-    
-  } 
-
-
-  function SubSubmit(pForm,pLink){
-    $('#'+pForm).ajaxSubmit({
-        url : pLink, 
-        type: "POST",
-        beforeSubmit: function(formData, jqForm, options){
-                                      //var queryString = $.param(formData);
-                                      //console.log('About to submit: \n' + queryString + '\n');
-                                      return true;                   
-                                     }, //showRequest,
-        success: function(data){ 
-                $('#html_ajax').html(data);
-                //console.log("respose: " + data);
-          },                                     
-        error: function(data){
-                                Informar('Erro na requisição','Não foi possível executar ação :( '+"<br><br>responseText:"+data['responseText']+'<br>StatusText:'+data['statusText']+'<br>Status:'+data['status']);        
-                             } //errorJson
-    });
-    return false;
-    
-  } 
-  
-
-  // function ValidaCpf() {
-  //    var retorno = false;
-  //    var numero  = $('.isCpf').val();
-  //    numero = unformatNumber(numero);
-  //    if(numero==""){ return false; };
-  //    if (isCpf(numero)) {
-  //        retorno = true;
-  //    } else {
-  //     Informar('Validação','CPF informado é inválido !  <br><br><b>' + $('.isCpf').val());
-  //     $('.isCpf').val('');
-  //    }
-  //    return retorno;
-  // }
-  // function ValidaCnpj() {
-  //    var retorno = false;
-  //    var numero  = $('.isCnpj').val();
-  //    numero = unformatNumber(numero);
-  //    if(numero==""){ return false; };
-  //    if (isCnpj(numero)) {
-  //        retorno = true;
-  //    } else {
-  //     Informar('Validação','CNPJ informado é inválido !  <br><br><b>' + $('.isCnpj').val());
-  //     $('.isCnpj').val('');
-  //    }
-  //    return retorno;
-  // }
-   
-   
-  function validameupai(pField){
-    //$('#'+pForm).ajaxSubmit({
-        var id = $(pField).attr('id');
-        var nome = $(pField).attr('name');
-        var menu = nome.substr(0,12);
-        var menuid = nome.substr(12,1);
-        var menupai = menuid-1;
-        var procurar = menu+menupai+'_'+id;
-        
-  
-        if(id>0){
-            if ( myform.elements[nome].checked ) {
-                if ( ! myform.elements[procurar].checked ) {
-                    //alert( $("label[for='"+procurar+"']").text() );
-                    Informar('Nível Superior','<div class="info-box"><span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span><div class="info-box-content"><span class="info-box-text">Por favor marque o nivel superior</span><span class="info-box-number">'+$("label[for='"+procurar+"']").text()+'</span></div></div> ' );
-                    myform.elements[nome].checked = 0; 
-                    //mensagem('Erro','Por favor marque o nivel superior !'); // +'\n'+  $("label[for='"+procurar+"']").text());
-                }    
-            }
-        }
-       
-      
-  } 
-   
-
-
-try {xmlhttp = new XMLHttpRequest();} catch(ee) { 
-        try{xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");} catch(e) { 
-                try{xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");} catch(E) 
-{xmlhttp = false;} 
-        } 
-} 
-
-  function carrega(_idContainer, _endereco){ 
-        var tag_container = document.getElementById(_idContainer); 
-        tag_container.innerHTML = ''; 
-         
-        xmlhttp.open('GET',_endereco,true); 
-        xmlhttp.onreadystatechange = function() { 
-                if (xmlhttp.readyState == 4){ 
-                        retorno = xmlhttp.responseText; 
-                        tag_container.innerHTML = retorno; 
-                } 
-        } 
-        xmlhttp.send(null) 
-    } 
-
-//Função que formata uma string Jquery em número
-Number.prototype.formatMoney = function(c, d, t){
-  var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-};
